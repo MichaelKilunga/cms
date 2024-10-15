@@ -1,18 +1,30 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Dashboard') }}
+            {{ __('Services Report') }}
         </h2>
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white1 dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
+                <div class="print-now p-6 text-gray-900 dark:text-gray-100">
                     {{-- {{ __("This is member's panel!") }} --}}
                     @include('attendance.navigation')
                 </div>
-                <div class="p-6 text-gray-900 dark:text-gray-100">
+                <div class="p-0 text-gray-900 dark:text-gray-100">
+                    @if (session('alert_success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ session('alert_success') }}
+                            <button type="button" class="" data-bs-dismiss="alert" aria-label="Close"><span class="btn-close"></span></button>
+                        </div>
+                    @endif
+                    @if (session('alert_failure'))
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{ session('alert_failure') }}
+                            <button type="button" class="" data-bs-dismiss="alert" aria-label="Close"><span class="btn-close"></span></button>
+                        </div>
+                    @endif
                     @yield('content')
                 </div>
             </div>

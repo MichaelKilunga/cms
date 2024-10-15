@@ -1,6 +1,6 @@
 <nav x-data="{ open: false }" class="bg-white1 dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
     <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="print-now max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">
 
@@ -34,33 +34,33 @@
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                         <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
+                    </svg> Links
                 </button>
             </div>
         </div>
     </div>
 
     <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
+    <div :class="{'block': open, 'hidden': ! open}" class="print-now hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('finance')" :active="request()->routeIs('finance')">
-                {{ __('Finances') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('member')" :active="request()->routeIs('member')">
-                {{ __('Members') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('department')" :active="request()->routeIs('department')">
-                {{ __('Departments') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('message')" :active="request()->routeIs('message')">
-                {{ __('Messages') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('report')" :active="request()->routeIs('report')">
-                {{ __('Reports') }}
-            </x-responsive-nav-link>
+            <x-nav-link :href="route('attendance')" :active="request()->routeIs('index')">
+                {{ __('All services') }}
+            </x-nav-link>
+            <x-nav-link :href="route('finance')" :active="request()->routeIs('members/guests')">
+                {{ __('Events') }}
+            </x-nav-link>
+            <x-nav-link :href="route('member')" :active="request()->routeIs('member/registered')">
+                {{ __('Mashangilio') }}
+            </x-nav-link>
+            <x-nav-link :href="route('department')" :active="request()->routeIs('members/believers')">
+                {{ __('Maombi') }}
+            </x-nav-link>
+            <x-nav-link :href="route('message')" :active="request()->routeIs('members/followup')">
+                {{ __('Mikutano') }}
+            </x-nav-link>
+            <x-nav-link :href="route('report')" :active="request()->routeIs('report')">
+                {{ __('Sunday Services') }}
+            </x-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->

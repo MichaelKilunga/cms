@@ -90,6 +90,12 @@
     scroll-behavior: smooth;
   }
 }
+@media print {
+  .card-footer, .print-now {
+      display: none; /* Hide footer in print view */
+  }
+}
+
 
 body {
   margin: 0;
