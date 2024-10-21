@@ -8,6 +8,7 @@ use App\Http\Controllers\QuarterlyReportController;
 use App\Http\Controllers\DisbursementReportController;
 use App\Http\Controllers\UserController;
 use Laravel\Jetstream\Role;
+use App\Http\Controllers\BranchController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -37,11 +38,20 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified', 'role:super-admin'])->name('dashboard');
 
-
-
 Route::middleware(['auth','role:super-admin'])->group(function () {
     Route::get('/users', [UserController::class, 'index'])->name('users');
+    Route::post('/users', [UserController::class, 'store'])->name('users.store');
+    Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+
+    Route::get('/branches', [BranchController::class, 'index'])->name('branches');
+    Route::post('/branches', [BranchController::class, 'store'])->name('branches.store');
+    Route::get('/branches/create', [BranchController::class, 'create'])->name('branches.create');
+    Route::get('/branches/{branch}/edit', [BranchController::class, 'edit'])->name('branches.edit');
+    Route::put('/branches/{branch}', [BranchController::class, 'update'])->name('branches.update');
+    Route::delete('/branches/{branch}', [BranchController::class, 'destroy'])->name('branches.destroy');
+
 });
+
