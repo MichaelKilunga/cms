@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class AttendanceReportController extends Controller {
     public function index() {
         $reports = AttendanceReport::all();
-        return view( 'attendance.index', compact( 'reports' ) );
+        return view( 'super-admin.attendance.index', compact( 'reports' ) );
     }
 
     public function create() {

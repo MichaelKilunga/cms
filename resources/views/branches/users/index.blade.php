@@ -1,11 +1,11 @@
-@extends('admin.app')
+@extends('branches.app')
 
 @section('content')
     <div class="container mt-5">
         <div class="card shadow">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h1 class="mb-0">Manage Users</h1>
-                <a href="{{ route('users.create') }}" class="btn btn-success">Add New User</a>
+                <a href="{{ route('users.create') }}" class="btn btn-primary">Add New User</a>
             </div>
             <div class="card-body  table-responsive">
                 <table class="table table-striped table-hover table-bordered">

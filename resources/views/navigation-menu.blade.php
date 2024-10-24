@@ -15,8 +15,10 @@
                     <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')" class="no-underline">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    @hasrole('super-admin')
                     <x-nav-link href="{{ route('service') }}" :active="request()->routeIs('service')" class="no-underline">
-                        {{ __('File Report') }}
+                        {{ __('Filed Report') }}
                     </x-nav-link>
                     <x-nav-link href="{{ route('users') }}" :active="request()->routeIs('users')" class="no-underline">
                         {{ __('Users') }}
@@ -24,6 +26,19 @@
                     <x-nav-link href="{{ route('branches') }}" :active="request()->routeIs('branches')" class="no-underline">
                         {{ __('Branches') }}
                     </x-nav-link>
+                    @endhasrole
+
+                    @hasrole('admin|pastor|hof')
+                    <x-nav-link href="{{ route('branch.users', session('branch_id')) }}" :active="request()->routeIs('branch.users')" class="no-underline">
+                        {{ __('Users') }}
+                    </x-nav-link>
+                    <x-nav-link href="{{ route('branch.reports', session('branch_id')) }}" :active="request()->routeIs('branch.reports')" class="no-underline">
+                        {{ __('File Report') }}
+                    </x-nav-link>
+                    {{-- <x-nav-link href="{{ route('branch.dashboard', session('branch_id')) }}" :active="request()->routeIs('branch.dashboard')" class="no-underline">
+                        {{ __('Branch') }}
+                    </x-nav-link> --}}
+                    @endhasrole
                 </div>
             </div>
 
@@ -147,9 +162,18 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')" class="no-underline">
+            <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')" class="no-underline">
                 {{ __('Dashboard') }}
-            </x-responsive-nav-link>
+            </x-nav-link>
+            <x-nav-link href="{{ route('service') }}" :active="request()->routeIs('service')" class="no-underline">
+                {{ __('File Report') }}
+            </x-nav-link>
+            <x-nav-link href="{{ route('users') }}" :active="request()->routeIs('users')" class="no-underline">
+                {{ __('Users') }}
+            </x-nav-link>
+            <x-nav-link href="{{ route('branches') }}" :active="request()->routeIs('branches')" class="no-underline">
+                {{ __('Branches') }}
+            </x-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->

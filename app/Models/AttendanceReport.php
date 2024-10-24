@@ -38,4 +38,9 @@ class AttendanceReport extends Model
         'Cds_dvd_tapes',
         'books_and_stickers',
     ];
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class);
+    }
 }

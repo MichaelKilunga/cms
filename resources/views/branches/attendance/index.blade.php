@@ -1,11 +1,11 @@
-@extends('attendance.service')
+@extends('branches.attendance.service')
 
 @section('content')
     <div class="container mt-4">
         <div class="card shadow">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h2 class="align-left">ALL SESRVICES REPORT</h2>
-                <a class="btn btn-primary mb-1 align-right" href="{{ route('attendance.create') }}">Add New</a>
+                <a class="btn btn-primary mb-1 align-right" href="{{ route('reports.create', $branch->id) }}"><i class="fas fa-plus"></i> New Report</a>
             </div>
 
             <div class="card-body table-responsive">
@@ -25,9 +25,9 @@
                                 <td>{{ $report['service_name'] }}</td>
                                 <td>{{ $report['total_attendance'] }}</td>
                                 <td class="flex justify-between">
-                                    <a class="btn btn-success" href="{{ route('attendance.show', $report['id']) }}">View</a>
-                                    <a class="btn btn-light" href="{{ route('attendance.edit', $report['id']) }}">Edit</a>
-                                    <form action="{{ route('attendance.destroy', $report['id']) }}" method="POST">
+                                    <a href="{{ route('reports.show', ['branch'=>$branch->id,'id'=>$report['id']]) }}" class="btn btn-sm  btn-success"><i class="fas fa-eye"></i> View</a>
+                                    <a href="{{ route('edit.reports', ['branch'=>$branch->id,'report'=>$report['id']]) }}" class="btn btn-sm  btn-primary"><i class="fas fa-edit"></i> Edit</a>
+                                    <form action="{{ route('attendance.destroy', ['id'=>$branch->id,'report'=>$report['id']]) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm   btn-danger"

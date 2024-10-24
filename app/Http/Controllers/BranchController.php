@@ -5,13 +5,15 @@ use App\Models\Branch;
 use Illuminate\Http\Request;
 
 class BranchController extends Controller {
-    public function index() {
-        $branches = Branch::all();
-        return view( 'branches.index', compact( 'branches' ) );
+    
+    public function index()
+    {
+        $branches = Branch::with('users')->get();
+        return view('super-admin.branches.index', compact('branches'));
     }
 
     public function create() {
-        return view( 'branches.create' );
+        return view( 'super-admin.branches.create' );
     }
 
     public function store( Request $request ) {
@@ -28,7 +30,7 @@ class BranchController extends Controller {
     // Show the form for editing the specified branch
 
     public function edit( Branch $branch ) {
-        return view( 'branches.edit', compact( 'branch' ) );
+        return view( 'super-admin.branches.edit', compact( 'branch' ) );
     }
 
     // Update the specified branch in storage
