@@ -10,6 +10,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SuperAdmin\SuperAdminController;
 use App\Http\Controllers\AllUserController;
 use App\Http\Controllers\SuperAdminReportsController;
+use App\Http\Controllers\MemberController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -41,6 +42,17 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         
         Route::get('/', [BranchController::class, 'dashboard'])->name('branch.dashboard');
         Route::get('/edit', [BranchController::class, 'edit'])->name('branch.edit');
+
+        Route::get('/member', [MemberController::class, 'index'])->name('member.index');
+        Route::get('/member/create', [MemberController::class, 'create'])->name('member.create');
+        // Route::get('/member/{member}/show', [MemberController::class, 'show'])->name('member.show');
+        Route::post('/member/store', [MemberController::class, 'store'])->name('member.store');
+        Route::get('/member/{member}/edit', [MemberController::class, 'edit'])->name('member.edit');
+        Route::put('/member/{member}', [MemberController::class, 'update'])->name('member.update');
+        Route::delete('/member/{member}', [MemberController::class, 'destroy'])->name('member.destroy');
+        Route::get('/member/{member}', [MemberController::class, 'show'])->name('member.show');
+        
+
     });
 
 

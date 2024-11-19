@@ -18,4 +18,8 @@ class Branch extends Model {
         return $this->hasMany( AttendanceReport::class );
     }
 
+    public function members() {
+        return $this->hasMany( Member::class );
+    }
+
 }

@@ -35,9 +35,9 @@
                     <x-nav-link href="{{ route('branch.reports', session('branch_id')) }}" :active="request()->routeIs('branch.reports')" class="no-underline">
                         {{ __('File Report') }}
                     </x-nav-link>
-                    {{-- <x-nav-link href="{{ route('branch.dashboard', session('branch_id')) }}" :active="request()->routeIs('branch.dashboard')" class="no-underline">
-                        {{ __('Branch') }}
-                    </x-nav-link> --}}
+                    <x-nav-link href="{{ route('member.index', session('branch_id')) }}" :active="request()->routeIs('member.index')" class="no-underline">
+                        {{ __('Members') }}
+                    </x-nav-link>
                     @endhasrole
                 </div>
             </div>
