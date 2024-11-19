@@ -7,8 +7,10 @@
                 <h2>Add New Member</h2>
             </div>
             <div class="card-body">
-                <form action="{{ route('member.store', ['branch'=>session('branch_id')]) }}" method="POST">
+                <form action="{{ route('member.store', ['branch' => session('branch_id')]) }}" method="POST">
                     @csrf
+                    <input type="text" name="branch_id" id="branch_id" value="{{ $branch->id }}" hidden
+                        class="form-control" reqired>
                     <div class="form-group">
                         <label for="name">Name</label>
                         <input type="text" name="name" id="name" class="form-control" required>
@@ -63,7 +65,8 @@
                     </div>
 
                     <button type="submit" class="btn btn-primary mt-3">Add Member</button>
-                    <a href="{{ route('member.index', ['branch'=>$branch->id]) }}" class="btn btn-secondary mt-3">Cancel</a>
+                    <a href="{{ route('member.index', ['branch' => $branch->id]) }}"
+                        class="btn btn-secondary mt-3">Cancel</a>
                 </form>
             </div>
         </div>

@@ -28,6 +28,7 @@ class MemberController extends Controller
      */
     public function create(Branch $branch)
     {
+        // dd($branch);
         return view('branches.members.create', compact('branch'));
     }
 
@@ -36,6 +37,7 @@ class MemberController extends Controller
      */
     public function store(Request $request)
 {
+    dd($request);
     $data = $request->validate([
         'name' => 'required|string',
         'phone' => 'required|string',
