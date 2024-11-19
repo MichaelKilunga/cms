@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Branch;
 use App\Models\Member;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class MemberController extends Controller
@@ -35,9 +36,9 @@ class MemberController extends Controller
     /**
      * Store a newly created member in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, Branch $branch)
 {
-    dd($request);
+    // dd($branch);
     $data = $request->validate([
         'name' => 'required|string',
         'phone' => 'required|string',
@@ -45,8 +46,8 @@ class MemberController extends Controller
         'occupation' => 'nullable|string',
         'dini_dhehebu' => 'nullable|string',
         'spiritual_status' => 'nullable|string',
+        'branch_id' => 'required|string', //'required|exists:branches,id',
         'description' => 'nullable|string',
-        'branch_id' => 'required|exists:branches,id',
         'age_group' => 'required|string', // If this is part of the form
     ]);
 
@@ -56,7 +57,7 @@ class MemberController extends Controller
     // Create the member with the validated data
     Member::create($data);
 
-    return redirect()->route('members.index')->with('success', 'Member added successfully.');
+    return redirect()->route('member.index', 'branch')->with('success', 'Member added successfully.');
 }
 
 
@@ -105,7 +106,9 @@ class MemberController extends Controller
      */
     public function show(Branch $branch, Member $member)
     {
-        // dd($member->id);
-        return view('branches.members.show', compact('branch', 'member'));
+        // $branch_name = Branch::find($member->branch_id);
+        $user = User::find($member->added_by);
+        // dd($user);
+        return view('branches.members.show', compact('branch', 'member', 'user'));
     }
 }

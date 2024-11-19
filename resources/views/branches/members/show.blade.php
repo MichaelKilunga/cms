@@ -11,55 +11,61 @@
                 <div class="row">
                     <!-- Name -->
                     <div class="col-md-6">
-                        <h4>Name</h4>
+                        <h4 class=" text-primary" >Name</h4>
                         <p>{{ $member->name }}</p>
                     </div>
                     
                     <!-- Phone -->
                     <div class="col-md-6">
-                        <h4>Phone</h4>
+                        <h4 class=" text-primary">Phone</h4>
                         <p>{{ $member->phone }}</p>
                     </div>
                     
                     <!-- Location -->
                     <div class="col-md-6">
-                        <h4>Location</h4>
+                        <h4 class=" text-primary">Location</h4>
                         <p>{{ $member->location }}</p>
                     </div>
 
                     <!-- Occupation -->
                     <div class="col-md-6">
-                        <h4>Occupation</h4>
+                        <h4 class=" text-primary">Occupation</h4>
                         <p>{{ $member->occupation }}</p>
                     </div>
 
                     <!-- Religious Affiliation -->
                     <div class="col-md-6">
-                        <h4>Religion/Denomination</h4>
+                        <h4 class=" text-primary">Religion/Denomination</h4>
                         <p>{{ $member->dini_dhehebu }}</p>
                     </div>
 
                     <!-- Spiritual Status -->
                     <div class="col-md-6">
-                        <h4>Spiritual Status</h4>
+                        <h4 class=" text-primary">Spiritual Status</h4>
                         <p>{{ $member->spiritual_status }}</p>
                     </div>
 
                     <!-- Age Grroup -->
                     <div class="col-md-6">
-                        <h4>Spiritual Status</h4>
+                        <h4 class=" text-primary">Age Group</h4>
                         <p>{{ $member->age_group }}</p>
                     </div>
 
                     <!-- Age Grroup -->
                     <div class="col-md-6">
-                        <h4>Spiritual Status</h4>
-                        <p>{{ $member->added_by }}</p>
+                        <h4 class=" text-primary">Added By</h4>
+                        <p>{{ $user->name }}</p>
                     </div>
 
+                    <!-- Branch Name -->
+                    <div class="col-md-6">
+                        <h4 class=" text-primary">Branch</h4>
+                        <p>{{ $branch->name }}</p>
+                    </div>
+                    
                     <!-- Description -->
-                    <div class="col-md-12">
-                        <h4>Description</h4>
+                    <div class="col-md-6">
+                        <h4 class=" text-primary">Description</h4>
                         <p>{{ $member->description }}</p>
                     </div>
                 </div>

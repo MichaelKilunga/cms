@@ -16,6 +16,9 @@ class Member extends Model {
         'dini_dhehebu',
         'spiritual_status',
         'description',
+        'branch_id',
+        'age_group',
+        'added_by',
     ];
 
     public function members() {
