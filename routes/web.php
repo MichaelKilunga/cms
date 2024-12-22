@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RolePermissionController;
+use App\Http\Controllers\ChurchController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -9,26 +10,23 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Route::middleware([
-//     'auth:sanctum',
-//     config('jetstream.auth_session'),
-//     'verified',
-// ])->group(function () {
-//     Route::get('/dashboard', function () {
-//         return view('dashboard');
-//     })->name('dashboard');
-// });
+Route::middleware(['auth', 'can:login'])->group(function () {
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+});
 
-// Route::middleware(['auth', 'role:Church Board'])->group(function () {
-//     Route::get('/church-board', [ChurchBoardController::class, 'index'])->name('church-board.index');
-// });
+Route::middleware(['auth', 'can:manage church'])->group(function () {
+    // Route::resource('churches', ChurchController::class); 
+    // ROLES ROUTER
+    Route::get('churches', [ChurchController::class, 'index'])->name('churches');
+    Route::get('churches/create', [ChurchController::class, 'create'])->name('churches.create');
+    Route::post('churches', [ChurchController::class, 'store'])->name('churches.store');
+    Route::get('churches/{church}/edit', [ChurchController::class, 'edit'])->name('churches.edit');
+    Route::put('churches/{church}', [ChurchController::class, 'update'])->name('churches.update');
+    Route::delete('churches/{church}', [ChurchController::class, 'destroy'])->name('churches.destroy');
 
-// Route::middleware(['auth', 'role:Branch Admin'])->group(function () {
-//     Route::get('/branch-admin', [BranchAdminController::class, 'index'])->name('branch-admin.index');
-// });
+});
 
 Route::middleware(['auth', 'can:manage finances'])->group(function () {
-    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // ROLES ROUTER
     Route::get('roles', [RolePermissionController::class, 'index'])->name('roles');
