@@ -18,4 +18,12 @@ class Church extends Model
     {
         return $this->belongsTo(User::class, 'administrator_id');
     }
+    public function members()
+    {
+        return $this->hasMany(Member::class);
+    }
+    public function services()
+    {
+        return $this->hasMany(Service::class);
+    }
 }

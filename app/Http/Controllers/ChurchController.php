@@ -18,6 +18,10 @@ class ChurchController extends Controller
         return view('churches.index', compact('churches'));
     }
 
+    public function show(Church $church){
+        return view('churches.show', compact('church'));
+    }
+
     /**
      * Show the form for creating a new church.
      */
@@ -87,7 +91,7 @@ class ChurchController extends Controller
             'administrator_id' => $request->administrator_id,
         ]);
 
-        return redirect()->route('churches.index')->with('success', 'Church updated successfully.');
+        return redirect()->route('churches')->with('success', 'Church updated successfully.');
     }
 
     /**
@@ -96,6 +100,6 @@ class ChurchController extends Controller
     public function destroy(Church $church)
     {
         $church->delete();
-        return redirect()->route('churches.index')->with('success', 'Church deleted successfully.');
+        return redirect()->route('churches')->with('success', 'Church deleted successfully.');
     }
 }

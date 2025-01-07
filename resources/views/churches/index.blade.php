@@ -29,6 +29,7 @@
                     <td>{{ $church->administrator->name }}</td>
                     <td>
                         <a href="{{ route('churches.edit', $church->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="{{ route('churches.show', $church->id) }}" class="btn btn-success btn-sm">show</a>
                         <form action="{{ route('churches.destroy', $church->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')

@@ -33,7 +33,7 @@ class CreateNewUser implements CreatesNewUsers
         ]);
 
         // Assign default role & permission
-        $user->assignRole('Member');
+        $user->assignRole('Church Admin');
         return $user;
     }
 }
