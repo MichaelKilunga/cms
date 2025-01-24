@@ -1,22 +1,28 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\church_admin;
 
-use App\Models\Member;
+
+use App\Models\User;
 use App\Models\Branch;
 use App\Models\Church;
-use App\Models\User;
+use App\Models\Member;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Egulias\EmailValidator\EmailParser;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
-class MemberController extends Controller
+class ChurchAdminMemberController extends Controller
 {
     /**
      * Display a listing of the members.
      */
     public function index()
     {
-        $members = Member::with(['user', 'branch', 'church'])->get();
-        return view('members.index', compact('members'));
+        $currentChurch = auth::user()->church->first();
+        $members = Member::where('church_id', $currentChurch->id)->with(['user', 'branch', 'church'])->get();
+        return view('church_admin.members.index', compact('members'));
     }
 
     /**
@@ -35,20 +41,40 @@ class MemberController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'branch_id' => 'required|exists:branches,id',
-            'church_id' => 'required|exists:churches,id',
-            'status' => 'nullable|string|max:255',
-            'description' => 'nullable|string',
-            'date_of_birth' => 'nullable|date',
-            'phone_number' => 'nullable|string|max:15',
-            'gender' => 'nullable|in:male,female,other',
-        ]);
+        $request['email'] = (trim($request['name']) . '@cms.com');
+        $validated = null;
+        try {
+            $validated = $request->validate([
+                // 'user_id' => 'required|exists:users,id',
+                'name' => 'required|string|max:255|unique:users,name',
+                'branch_id' => 'required|exists:branches,id',
+                'church_id' => 'required|exists:churches,id',
+                // 'status' => 'nullable|string|max:255',
+                // 'description' => 'nullable|string',
+                // 'date_of_birth' => 'nullable|date',
+                // 'phone_number' => 'nullable|string|max:15',
+                'gender' => 'nullable|in:male,female',
+            ]);
+            
+            
+            $user = User::create([
+                'name' => $request['name'],
+                'email' => $request['email'],
+                'password' => Hash::make('password'),
+            ]);
+            // Assign default role & permission
+            $user->assignRole('member');
+            
+            $request['user_id'] = $user->id;
+            
+            // dd($request->all());
 
-        Member::create($request->all());
+            Member::create($request->all());
 
-        return redirect()->route('members')->with('success', 'Member added successfully.');
+            return redirect()->back()->with('success', 'Member added successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withInput()->withErrors($validated)->with('error', $e->getMessage());
+        }
     }
 
     /**

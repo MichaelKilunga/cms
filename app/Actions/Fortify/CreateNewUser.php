@@ -29,11 +29,11 @@ class CreateNewUser implements CreatesNewUsers
         $user = User::create([
             'name' => $input['name'],
             'email' => $input['email'],
-            'password' => Hash::make($input['password']),
+            'password' => Hash::make($input['password']),  
         ]);
 
         // Assign default role & permission
-        $user->assignRole('Church Admin');
+        $user->assignRole('church admin');
         return $user;
     }
 }

@@ -99,7 +99,17 @@
                 @endif
 
                 <!-- Settings Dropdown -->
-                <div class="ms-3 relative">
+                <div class="ms-3 relative  inline-flex rounded-md">
+                    <span class="inline-flex rounded-md">
+                        <p id="clock#"
+                            class="inline-flex items-center px-3 mx-2# py-2  text-sm leading-4 font-medium rounded-md text-gray-500 text-primary dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-700 active:bg-gray-50 dark:active:bg-gray-700 transition ease-in-out duration-150">
+                            {{-- @can('manage system') --}}
+                            @isset(Auth::user()->church->first()->name)
+                                {{ Auth::user()->church->first()->name }}
+                            @endisset
+                            {{-- @endcan --}}
+                        </p>
+                    </span>
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
                             @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
@@ -177,35 +187,56 @@
                 <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                     {{ __('Dashboard') }}
                 </x-nav-link>
-                <x-nav-link href="{{ route('roles') }}" :active="request()->routeIs('roles')">
-                    {{ __('Roles') }}
-                </x-nav-link>
-                <x-nav-link href="{{ route('users') }}" :active="request()->routeIs('users')">
-                    {{ __('Users') }}
-                </x-nav-link>
                 @can('manage system')
+                    <x-nav-link href="{{ route('roles') }}" :active="request()->routeIs('roles')">
+                        {{ __('Roles') }}
+                    </x-nav-link>
+                    <x-nav-link href="{{ route('users') }}" :active="request()->routeIs('users')">
+                        {{ __('Users') }}
+                    </x-nav-link>
                     <x-nav-link href="{{ route('churches') }}" :active="request()->routeIs('churches')">
                         {{ __('Churches') }}
                     </x-nav-link>
+                    <x-nav-link href="{{ route('branches') }}" :active="request()->routeIs('branches')">
+                        {{ __('Branches') }}
+                    </x-nav-link>
+                    <x-nav-link href="{{ route('members') }}" :active="request()->routeIs('members')">
+                        {{ __('Members') }}
+                    </x-nav-link>
+                    <x-nav-link href="{{ route('services') }}" :active="request()->routeIs('services')">
+                        {{ __('Services') }}
+                    </x-nav-link>
+                    <x-nav-link href="{{ route('finances') }}" :active="request()->routeIs('finances')">
+                        {{ __('Finances') }}
+                    </x-nav-link>
+                    <x-nav-link href="{{ route('messages') }}" :active="request()->routeIs('messages')">
+                        {{ __('Messages') }}
+                    </x-nav-link>
+                    <x-nav-link href="{{ route('service_categories') }}" :active="request()->routeIs('service_categories')">
+                        {{ __('Service Categories') }}
+                    </x-nav-link>
                 @endcan
-                <x-nav-link href="{{ route('branches') }}" :active="request()->routeIs('branches')">
-                    {{ __('Branches') }}
-                </x-nav-link>
-                <x-nav-link href="{{ route('members') }}" :active="request()->routeIs('members')">
-                    {{ __('Members') }}
-                </x-nav-link>
-                <x-nav-link href="{{ route('services') }}" :active="request()->routeIs('services')">
-                    {{ __('Services') }}
-                </x-nav-link>
-                <x-nav-link href="{{ route('finances') }}" :active="request()->routeIs('finances')">
-                    {{ __('Finances') }}
-                </x-nav-link>
-                <x-nav-link href="{{ route('messages') }}" :active="request()->routeIs('messages')">
-                    {{ __('Messages') }}
-                </x-nav-link>
-                <x-nav-link href="{{ route('service_categories') }}" :active="request()->routeIs('service_categories')">
-                    {{ __('Service Categories') }}
-                </x-nav-link>
+
+                @can('manage church')
+                    <x-nav-link href="{{ route('church_admin.branches') }}" :active="request()->routeIs('church_admin.branches')">
+                        {{ __('Branches') }}
+                    </x-nav-link>
+                    <x-nav-link href="{{ route('church_admin.members') }}" :active="request()->routeIs('church_admin.members')">
+                        {{ __('Members') }}
+                    </x-nav-link>
+                    <x-nav-link href="{{ route('services') }}" :active="request()->routeIs('services')">
+                        {{ __('Services') }}
+                    </x-nav-link>
+                    <x-nav-link href="{{ route('finances') }}" :active="request()->routeIs('finances')">
+                        {{ __('Finances') }}
+                    </x-nav-link>
+                    <x-nav-link href="{{ route('messages') }}" :active="request()->routeIs('messages')">
+                        {{ __('Messages') }}
+                    </x-nav-link>
+                    <x-nav-link href="{{ route('service_categories') }}" :active="request()->routeIs('service_categories')">
+                        {{ __('Service Categories') }}
+                    </x-nav-link>
+                @endcan
             </div>
         </div>
 

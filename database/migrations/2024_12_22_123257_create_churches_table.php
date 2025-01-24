@@ -16,7 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('logo')->nullable(); // Path to the logo image
             $table->string('motto')->nullable(); // Optional motto
-            $table->foreignId('administrator_id')->unique()->constrained('users')->onDelete('cascade'); // References the users table                        
+            // add foreign key to the users table on delete set 'administrator_id' = 1
+            $table->foreignId('administrator_id')->constrained('users')->onDelete('no action');
             $table->timestamps();
         });
     }

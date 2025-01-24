@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('finances', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('service_category_id')->constrained('service_categories')->onDelete('cascade');
             $table->date('date')->useCurrent();
             $table->decimal('worship_offering', 10, 2)->default(0);
             $table->decimal('tithe_offering', 10, 2)->default(0);
@@ -24,7 +23,14 @@ return new class extends Migration
             $table->decimal('children_offering', 10, 2)->default(0);
             $table->decimal('cds_dvd_tapes', 10, 2)->default(0);
             $table->decimal('books_and_stickers', 10, 2)->default(0);
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('no action');
+            $table->foreignId('church_id')->constrained('churches')->onDelete('no action');
+            $table->foreignId('branch_id')->constrained('branches')->onDelete('no action');
+            $table->foreignId('service_id')->constrained('services')->onDelete('no action');
+            // approved or  not approved status
+            $table->boolean('status')->nullable();
+            $table->string('approval_reason')->nullable();
+            $table->string('approval_by')->nullable();  
             $table->timestamps();
         });
     }

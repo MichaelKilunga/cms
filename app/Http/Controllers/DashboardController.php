@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Spatie\Permission\Traits\HasRoles;
 use App\Models\Church;
 use App\Models\Branch;
@@ -17,8 +18,8 @@ class DashboardController extends Controller
 {
     function index()
     {
-        if (auth::user()->can('manage system')) {
-            if (!Auth::user()->can('manage system')) {
+        if (Gate::allows('manage system')) {
+            if (!Gate::allows('manage system')) {
                 abort(403, 'You do not have the required permissions.');
             }
             $totalChurches = Church::count();
@@ -44,40 +45,53 @@ class DashboardController extends Controller
                 'recentMembers'
             ));
         }
-        if (auth::user()->can('manage church')) {
+        if (Gate::allows('manage church')) {
 
-            $church = Church::where('administrator_id', Auth::user()->id)->first();
-            if (!$church->id) {
-                return view('church_admin.dashboard')->with('guest_church_admin', true);
-            } else {
-                // dd($church->id);
-                session(['church_id' => $church->id]);
-                session(['guest_church_admin' => '']);
-                // session()->destroy('guest_church_admin');
-                if (!Auth::user()->can('manage church')) {
-                    abort(403, 'You do not have the required permissions.');
-                }
-                // $totalChurches = Church::count();
-                $totalBranches = Branch::where('church_id',$church->id)->count();
-                $totalMembers = Member::where('church_id',$church->id)->count();
-                $totalServices = Service::where('church_id',$church->id)->count();
-                $totalFinances = Finance::where('church_id',$church->id)->count();
-                $totalServiceCategories = ServiceCategory::where('church_id',$church->id)->count();
-    
-                // $recentChurches = Church::latest()->take(5)->get()->pluck('name')->join(', ');
-                $recentBranches = Branch::where('church_id',$church->id)->latest()->take(5)->get()->pluck('name')->join(', ');
-                $recentMembers = Member::where('church_id',$church->id)->latest()->take(5)->get()->pluck('id')->join(', ');
-    
+            $totalBranches = 0;
+            $totalMembers = 0;
+            $totalServices = 0;
+            $totalFinances = 0;
+            $totalServiceCategories = 0;
+
+            $church = Church::where('administrator_id', Auth::user()->id);
+            
+            if ($church->count() == 0) {
+                $branches = Branch::where('church_id', 100000)->get();
+                session(['guest_church_admin' => 'true']);
                 return view('church_admin.dashboard', compact(
                     'totalBranches',
                     'totalMembers',
                     'totalServices',
                     'totalFinances',
                     'totalServiceCategories',
-                    'recentBranches',
-                    'recentMembers'
-                ));
+                    'branches',
+                ))->with( 'info', 'Create a church to continue!');
             }
+            else {
+                $branches = Branch::where('church_id', $church->first()->id)->get();
+                
+                session(['church_id' => $church->first()->id]);
+                session(['guest_church_admin' => '']);                
+
+                if (!Gate::allows('manage church')) {
+                    abort(403, 'You do not have the required permissions.');
+                }
+
+                $totalBranches = Branch::where('church_id',$church->first()->id)->count();
+                $totalMembers = Member::where('church_id',$church->first()->id)->count();
+                $totalServices = Service::where('church_id',$church->first()->id)->count();
+                $totalFinances = Finance::where('church_id',$church->first()->id)->count();
+                $totalServiceCategories = ServiceCategory::where('church_id',$church->first()->id)->count();
+
+            return view('church_admin.dashboard', compact(
+                'totalBranches',
+                'totalMembers',
+                'totalServices',
+                'totalFinances',
+                'totalServiceCategories',
+            ));
+            }
+
         }
     }
 }

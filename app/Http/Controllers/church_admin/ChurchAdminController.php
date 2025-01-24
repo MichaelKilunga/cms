@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\church_admin;
 
 use App\Models\Church;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 class ChurchAdminController extends Controller
@@ -18,7 +19,8 @@ class ChurchAdminController extends Controller
         return view('churches.index', compact('churches'));
     }
 
-    public function show(Church $church){
+    public function show(Church $church)
+    {
         return view('churches.show', compact('church'));
     }
 
@@ -36,27 +38,34 @@ class ChurchAdminController extends Controller
      */
     public function store(Request $request)
     {
+        // $request['administrator_id'] = Auth::user()->id;
+        try {
         $request->validate([
             'name' => 'required|string|max:255',
             'logo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'motto' => 'nullable|string|max:255',
             'administrator_id' => 'required|exists:users,id|unique:churches,administrator_id,' . Auth::user()->id ?? null,
         ]);
-
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+        // dd($request->all());
         $logoPath = null;
 
-        if ($request->hasFile('logo')) {
-            $logoPath = $request->file('logo')->store('logos', 'public');
+        try {
+            if ($request->hasFile('logo')) {
+                $logoPath = $request->file('logo')->store('logos', 'public');
+            }
+            Church::create([
+                'name' => $request->name,
+                'logo' => $logoPath,
+                'motto' => $request->motto,
+                'administrator_id' => $request->administrator_id,
+            ]);
+            return redirect()->back()->with('success', 'Church created successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
         }
-
-        Church::create([
-            'name' => $request->name,
-            'logo' => $logoPath,
-            'motto' => $request->motto,
-            'administrator_id' => $request->administrator_id,
-        ]);
-
-        return redirect()->route('churches')->with('success', 'Church created successfully.');
     }
 
     /**

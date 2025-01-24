@@ -10,6 +10,6 @@
             <p><strong>Church:</strong> {{ $branch->church->name }}</p>
         </div>
     </div>
-    <a href="{{ route('branches') }}" class="btn btn-primary mt-3">Back to List</a>
+    <a href="{{ route('church_admin.branches') }}" class="btn btn-primary mt-3">Back to List</a>
 </div>
 @endsection

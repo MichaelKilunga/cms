@@ -76,7 +76,12 @@ class User extends Authenticatable
     
     public function churches()
     {
-        return $this->hasMany(Church::class);
+        return $this->hasMany(Church::class, 'administrator_id');
+    }
+    
+    public function church()
+    {
+        return $this->hasMany(Church::class, 'administrator_id');
     }
     
     public function services()

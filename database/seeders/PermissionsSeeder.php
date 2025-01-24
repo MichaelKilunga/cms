@@ -16,14 +16,14 @@ class PermissionsSeeder extends Seeder
 
         // Define Permissions
         $permissions = [
-            'manage users',
-            'manage branches',
-            'view reports',
-            'file reports',
-            'approve reports',
-            'send notifications',
-            'manage departments',
-            'view finances',
+            'manage system',
+            'manage church',
+            'bishop church',    
+            'hof church',
+            'manage branch',
+            'pastor branch',
+            'hof branch',
+            'member',
         ];
 
         foreach ($permissions as $permission) {
@@ -32,10 +32,14 @@ class PermissionsSeeder extends Seeder
 
         // Assign Permissions to Roles
         $roles = [
-            'Church Board' => ['manage users', 'view reports', 'approve reports', 'view finances'],
-            'Branch Admin' => ['manage users', 'view reports', 'file reports', 'manage departments'],
-            'Resident Pastor' => ['view reports', 'approve reports'],
-            'Member' => ['file reports', 'view reports'],
+            'super admin' => ['manage system'],
+            'church admin' => ['manage church'],
+            'church bishop' => ['bishop church'],
+            'church hof' => ['hof church'],
+            'branch admin' => ['manage branch'],
+            'branch pastor' => ['pastor branch'],
+            'branch hof' => ['hof branch'],
+            'member' => ['member'],
         ];
 
         foreach ($roles as $roleName => $rolePermissions) {

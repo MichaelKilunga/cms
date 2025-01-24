@@ -13,6 +13,7 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
         <!-- Styles -->
         @livewireStyles
@@ -23,5 +24,27 @@
         </div>
 
         @livewireScripts
+        <script>
+            $(document).ready(function() {
+                $('button').on('click', function(event) {
+                    const $this = $(this);
+    
+                    if ($this.is('button[type="submit"]')) {
+                        const $form = $this.closest('form');
+                        if ($form.length) {
+                            if ($form[0].checkValidity()) {
+                                $this.css('pointer-events', 'none')
+                                    .text(
+                                        'Loading...'
+                                    );
+    
+                            }
+                        }
+                    }
+                });
+            });
+        </script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.js"></script>
     </body>
 </html>

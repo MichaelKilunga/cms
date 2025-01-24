@@ -26,4 +26,8 @@ class Branch extends Model
     {
         return $this->hasMany(Service::class);
     }
+    public function finances()
+    {
+        return $this->hasMany(Finance::class);
+    }
 }

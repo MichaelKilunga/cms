@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\church_admin;
 
 use App\Models\Service;
 use App\Models\Branch;
@@ -8,8 +8,9 @@ use App\Models\Church;
 use App\Models\ServiceCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
 
-class ServiceController extends Controller
+class ChurchAdminServiceController extends Controller
 {
     /**
      * Display a listing of the services.
@@ -58,27 +59,27 @@ class ServiceController extends Controller
                 'baptism_spirit' => 'nullable|integer|min:0',
                 'new_birth' => 'nullable|integer|min:0',
                 'first_timers' => 'nullable|integer|min:0',
-                // 'user_id' => 'required|exists:users,id',
+                'user_id' => 'required|exists:users,id',
                 'branch_id' => 'required|exists:branches,id',
                 'church_id' => 'required|exists:churches,id',
             ]);
 
-            $validatedData['user_id'] = Auth::user()->id;
+            // dd($validatedData);
 
             // If validation succeeds, proceed with your logic
             Service::create($validatedData);
-            return redirect()->route('services')->with('success', 'Service report created successfully.');
+            return redirect()->back()->with('success', 'Service report created successfully.');
         } catch (\Illuminate\Validation\ValidationException $e) {
             // Log the errors for debugging
             \Illuminate\Support\Facades\Log::error('Validation failed', ['errors' => $e->errors()]);
 
             // Redirect back with error messages
-            return redirect()->back()->withErrors($e->errors())->withInput();
+            return redirect()->back()->withErrors($e->errors())->withInput()->with('error', $e->getMessage());
         }
     }
 
     /**
-     * Show the form for editing the specified service.
+     * Show the form for editing the specified service. 
      */
     public function edit(Service $service)
     {

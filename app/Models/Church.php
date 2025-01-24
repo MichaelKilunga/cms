@@ -26,4 +26,13 @@ class Church extends Model
     {
         return $this->hasMany(Service::class);
     }
+    
+    public function branches()
+    {
+        return $this->hasMany(Branch::class, 'church_id');
+    }
+    public function finances()
+    {
+        return $this->hasMany(Finance::class);
+    }
 }

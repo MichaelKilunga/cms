@@ -25,7 +25,10 @@ class Service extends Model
         'first_timers',
         'user_id',
         'branch_id',
-        'church_id'
+        'church_id',
+        'status',
+        'approval_reason',
+        'approval_by',
     ];
 
     /**

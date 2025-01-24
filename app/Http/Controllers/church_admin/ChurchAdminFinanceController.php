@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\church_admin;
 
 use App\Models\Finance;
 use App\Models\Service;
 use App\Models\ServiceCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
 
-class FinanceController extends Controller
+class ChurchAdminFinanceController extends Controller
 {
     /**
      * Display a listing of the finances.
@@ -46,7 +47,7 @@ class FinanceController extends Controller
 
         try {
             $validatedData = $request->validate([
-                'service_category_id' => 'required|exists:service_categories,id',
+                'service_id' => 'required|exists:services,id',
                 'date' => 'required|date',
                 'worship_offering' => 'nullable|numeric|min:0',
                 'tithe_offering' => 'nullable|numeric|min:0',
@@ -57,15 +58,16 @@ class FinanceController extends Controller
                 'children_offering' => 'nullable|numeric|min:0',
                 'cds_dvd_tapes' => 'nullable|numeric|min:0',
                 'books_and_stickers' => 'nullable|numeric|min:0',
-                // 'user_id' => 'required|exists:users,id',
+                'user_id' => 'required|exists:users,id',
+                'church_id' => 'required|exists:churches,id',
+                'branch_id' => 'required|exists:branches,id',
             ]);
 
-            // dd($validatedData['tithe_offering']);
-            $validatedData['user_id'] = Auth::user()->id;
+            // dd($validatedData);
 
             Finance::create($validatedData);
 
-            return redirect()->route('finances')->with('success', 'Finance report created successfully.');
+            return redirect()->back()->with('success', 'Finance report created successfully.');
         } catch (\Illuminate\Validation\ValidationException $e) {
             // Log the errors for debugging
             \Illuminate\Support\Facades\Log::error('Validation failed', ['errors' => $e->errors()]);

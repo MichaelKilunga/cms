@@ -108,6 +108,10 @@
     <script>
         $(document).ready(function() {
 
+                @if (session('guest_church_admin') == 'true')
+                    $('#guestChurchAdminModal').modal('show');
+                @endif
+
             @if (session('success'))
                 Swal.fire({
                     icon: 'success',
@@ -123,6 +127,14 @@
                     // timer: 2000
                 });
             @endif
+            
+            @if (session('info'))
+                Swal.fire({
+                    icon: 'info',
+                    title: '{{ session('info') }}',
+                    // timer: 2000
+                });
+            @endif
 
             $('Table').DataTable({
                 paging: true, // Enable paging
@@ -132,7 +144,7 @@
             });
 
             $(".chosen").chosen({
-            // $("#select").chosen({
+                // $("#select").chosen({
                 width: "100%",
                 no_results_text: "No matches found!",
             });
@@ -141,24 +153,87 @@
             $(document).ready(function() {
                 $('#loader-overlay').hide(); // Hide loader initially
 
+
+                $('button').on('click', function(event) {
+                    const $this = $(this);
+                    if ($this.is('#hamburger')) {
+                        return;
+                    }
+                    // if ($this.is('#forAdminImport')) {
+                    //     return;
+                    // }
+
+                    //below implement code to check if the button is a submit button and if any of the required field is empty the loader will not appear otherwise it will appear while the form is being submitted
+                    if ($this.is('button[type="submit"]')) {
+                        const $form = $this.closest('form');
+                        if ($form.length) {
+                            if ($form[0].checkValidity()) {
+                                // $('#loader-overlay').show();
+                                $this.addClass(
+                                        'bg-light border border-danger# text-danger text-muted')
+                                    .css('pointer-events', 'none')
+                                    .html(
+                                        '<span class="spinner-border" style="width: 1rem; height: 1rem;" role="status" aria-hidden="true"></span>'
+                                    );
+                            }
+                        }
+                    }
+
+                    if (!$this.find('input[name="requiredField"]').val()) {
+                        return; // Exit the function
+                    }
+
+                    if ($this.is('button.btn-close[data-bs-dismiss="modal"]')) {
+                        return; // Exit the function
+                    }
+                    if ($this.is('.reportsDownloadButton')) {
+                        return;
+                    }
+                    if ($this.is('#addSaleRow')) {
+                        return;
+                    }
+                    if ($this.is('#addStockBtn')) {
+                        return;
+                    }
+                    $this.addClass('bg-light border border-danger# text-danger text-muted')
+                        .css('pointer-events', 'none')
+                        .html(
+                            '<span class="spinner-border" style="width: 1rem; height: 1rem;" role="status" aria-hidden="true"></span>'
+                        );
+                });
+
+
                 // Show the loader before a new page is requested (e.g., on link click)
                 $('a').on('click', function(event) {
+                    const $this = $(this);
+
                     // Prevent loader for modal triggers
-                    if ($(this).attr('data-bs-toggle') === 'modal') {
+                    if ($this.attr('data-bs-toggle') === 'modal') {
                         return; // Exit if the link is for opening a modal
                     }
+
+                    // Disable the link/button
+                    // $this.addClass('bg-light border border-danger text-danger text-muted')
+                    //     .css('pointer-events', 'none')
+                    //     .append(
+                    //         '<span class="spinner-border" style="width: 1rem; height: 1rem;" role="status" aria-hidden="true"></span>'
+                    //     );
+
 
                     // Skip showing loader if the target is a select field (including chosen dropdown)
                     if ($(this).closest('select, .chosen-container').length) {
                         return; // Exit if the link is associated with a select or chosen field
                     }
 
+
                     $('#loader-overlay').show();
                 });
 
                 // Show the loader when an AJAX request starts
                 $(document).ajaxStart(function() {
-                    $('#loader-overlay').show();
+                    if (!isNotificationCheck) { // Only show loader if it's not a notification check
+                        $('#loader-overlay').show();
+                    }
                 });
 
                 // Hide the loader when the AJAX request completes

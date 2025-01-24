@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('sender_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('receiver_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('sender_id')->constrained('users')->onDelete('no action');
+            $table->foreignId('receiver_id')->constrained('users')->onDelete('no action');  
             $table->string('type'); // e.g., 'in-app', 'push'
             $table->string('body');
             $table->timestamp('date')->useCurrent();
-            $table->foreignId('church_id')->constrained('churches')->onDelete('cascade');
-            $table->foreignId('branch_id')->nullable()->constrained('branches')->onDelete('cascade');
+            $table->foreignId('church_id')->constrained('churches')->onDelete('no action');
+            $table->foreignId('branch_id')->nullable()->constrained('branches')->onDelete('no action');
             $table->enum('status', ['sent', 'delivered', 'read'])->default('sent');
             $table->timestamps();
         });

@@ -15,20 +15,32 @@ class RoleAndPermissionSeeder extends Seeder
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
         // Define permissions
-        Permission::create(['name' => 'manage users']);
-        Permission::create(['name' => 'view reports']);
-        Permission::create(['name' => 'file reports']);
-        Permission::create(['name' => 'approve reports']);
+        Permission::create(['name' => 'manage system']); // Super Admin
+        Permission::create(['name' => 'manage church']); // Church Admin
+        Permission::create(['name' => 'bishop church']); // Church Bishop
+        Permission::create(['name' => 'hof church']); // Church Head of Finance
+        Permission::create(['name' => 'manage branch']); // Branch Admin
+        Permission::create(['name' => 'pastor branch']); // Branch Pastor
+        Permission::create(['name' => 'hof branch']); // Branch Head of Finance
+        Permission::create(['name' => 'member']); // Member
 
         // Define roles and assign permissions
-        $churchBoard = Role::create(['name' => 'Church Board']);
-        $branchAdmin = Role::create(['name' => 'Branch Admin']);
-        $residentPastor = Role::create(['name' => 'Resident Pastor']);
-        $member = Role::create(['name' => 'Member']);
+        $superAdmin = Role::create(['name' => 'super admin']);
+        $churchAdmin = Role::create(['name' => 'church admin']);
+        $churchBishop = Role::create(['name' => 'church bishop']);
+        $churchhof = Role::create(['name' => 'church hof']);
+        $branchAdmin = Role::create(['name' => 'branch admin']);
+        $residentPastor = Role::create(['name' => 'branch pastor']);
+        $branchhof = Role::create(['name' => 'branch hof']);
+        $member = Role::create(['name' => 'member']);
 
-        $churchBoard->givePermissionTo(['manage users', 'view reports', 'approve reports']);
-        $branchAdmin->givePermissionTo(['manage users', 'view reports']);
-        $residentPastor->givePermissionTo(['view reports', 'approve reports']);
-        $member->givePermissionTo(['file reports']);
+        $superAdmin->givePermissionTo('manage system');
+        $churchAdmin->givePermissionTo('manage church');
+        $churchBishop->givePermissionTo('bishop church');
+        $churchhof->givePermissionTo('hof church');
+        $branchAdmin->givePermissionTo('manage branch');
+        $residentPastor->givePermissionTo('pastor branch');
+        $branchhof->givePermissionTo('hof branch');
+        $member->givePermissionTo('member');
     }
 }

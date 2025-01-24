@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('location')->nullable();
-            $table->foreignId('church_id')->constrained('churches')->onDelete('cascade');
+            $table->foreignId('church_id')->constrained('churches')->onDelete('no action');
             $table->timestamps();
         });
     }

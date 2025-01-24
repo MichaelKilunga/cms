@@ -26,9 +26,13 @@ return new class extends Migration
             $table->integer('baptism_spirit')->default(0);
             $table->integer('new_birth')->default(0);
             $table->integer('first_timers')->default(0);
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('branch_id')->constrained('branches')->onDelete('cascade');
-            $table->foreignId('church_id')->constrained('churches')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('no action');
+            $table->foreignId('branch_id')->constrained('branches')->onDelete('no action');
+            $table->foreignId('church_id')->constrained('churches')->onDelete('no action');
+            // approved or  not approved status
+            $table->boolean('status')->nullable();
+            $table->string('approval_reason')->nullable();
+            $table->string('approval_by')->nullable();            
             $table->timestamps();
         });
     }

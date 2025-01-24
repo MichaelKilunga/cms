@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\church_admin;
 
 use App\Models\ServiceCategory;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class ServiceCategoryController extends Controller
+class ChurchAdminServiceCategoryController extends Controller
 {
     /**
      * Display a listing of the service categories.
@@ -29,13 +30,25 @@ class ServiceCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        try{
+        // Data = ['name','description', 'status','church_id','branch_id','user_id']
+        
+        $validatedData = $request->validate([
             'name' => 'required|unique:service_categories,name',
+            'description' => 'nullable',
             'status' => 'required|in:active,inactive',
+            'church_id' => 'required|exists:churches,id',
+            'branch_id' => 'required|exists:branches,id',
+            'user_id' => 'required|exists:users,id',  
         ]);
 
-        ServiceCategory::create($request->all());
-        return redirect()->route('service_categories')->with('success', 'Service category created successfully.');
+        // dd($validatedData);
+
+        ServiceCategory::create($validatedData);
+        return redirect()->back()->with('success', 'Service category created successfully.');
+        }catch(\Exception $e){
+            return redirect()->back()->withErrors($request)->with('error', $e->getMessage());
+        }
     }
 
     /**
