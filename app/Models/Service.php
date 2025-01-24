@@ -64,6 +64,6 @@ class Service extends Model
 
     public function finances()
     {
-        return $this->hasMany(Finance::class);
+        return $this->hasMany(Finance::class, 'service_id');
     }
 }

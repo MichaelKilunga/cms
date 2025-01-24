@@ -5,6 +5,7 @@ namespace App\Http\Controllers\church_admin;
 use App\Models\ServiceCategory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class ChurchAdminServiceCategoryController extends Controller
 {
@@ -13,8 +14,9 @@ class ChurchAdminServiceCategoryController extends Controller
      */
     public function index()
     {
-        $categories = ServiceCategory::all();
-        return view('service_categories.index', compact('categories'));
+        $currentChurch = auth::user()->church->first();
+        $categories = ServiceCategory::where('church_id', $currentChurch->id)->get();
+        return view('church_admin.service_categories.index', compact('categories'));
     }
 
     /**
@@ -22,7 +24,7 @@ class ChurchAdminServiceCategoryController extends Controller
      */
     public function create()
     {
-        return view('service_categories.create');
+        return view('church_admin.service_categories.create');
     }
 
     /**
@@ -45,7 +47,7 @@ class ChurchAdminServiceCategoryController extends Controller
         // dd($validatedData);
 
         ServiceCategory::create($validatedData);
-        return redirect()->back()->with('success', 'Service category created successfully.');
+        return redirect()->route('church_admin.service_categories')->with('success', 'Service category created successfully.');
         }catch(\Exception $e){
             return redirect()->back()->withErrors($request)->with('error', $e->getMessage());
         }
@@ -56,7 +58,7 @@ class ChurchAdminServiceCategoryController extends Controller
      */
     public function show(ServiceCategory $serviceCategory)
     {
-        return view('service_categories.show', compact('serviceCategory'));
+        return view('church_admin.service_categories.show', compact('serviceCategory'));
     }
 
     /**
@@ -64,7 +66,7 @@ class ChurchAdminServiceCategoryController extends Controller
      */
     public function edit(ServiceCategory $serviceCategory)
     {
-        return view('service_categories.edit', compact('serviceCategory'));
+        return view('church_admin.service_categories.edit', compact('serviceCategory'));
     }
 
     /**
@@ -72,13 +74,23 @@ class ChurchAdminServiceCategoryController extends Controller
      */
     public function update(Request $request, ServiceCategory $serviceCategory)
     {
+        try{
         $request->validate([
             'name' => 'required|unique:service_categories,name,' . $serviceCategory->id,
             'status' => 'required|in:active,inactive',
+            'description' => 'nullable',
+            'church_id' => 'required|exists:churches,id',
+            'branch_id' => 'required|exists:branches,id',
+            'user_id' => 'required|exists:users,id',
         ]);
 
+        // dd($request->all());
+
         $serviceCategory->update($request->all());
-        return redirect()->route('service_categories')->with('success', 'Service category updated successfully.');
+        return redirect()->route('church_admin.service_categories')->with('success', 'Service category updated successfully.');
+        }catch(\Exception $e){
+            return redirect()->back()->withErrors($request)->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -86,7 +98,11 @@ class ChurchAdminServiceCategoryController extends Controller
      */
     public function destroy(ServiceCategory $serviceCategory)
     {
+        try{
         $serviceCategory->delete();
-        return redirect()->route('service_categories')->with('success', 'Service category deleted successfully.');
+        return redirect()->route('church_admin.service_categories')->with('success', 'Service category deleted successfully.');
+        }catch(\Exception $e){
+            return redirect()->back()->with('error',$e->getMessage());
+        }
     }
 }

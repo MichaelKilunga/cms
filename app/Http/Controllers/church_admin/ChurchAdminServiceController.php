@@ -17,14 +17,15 @@ class ChurchAdminServiceController extends Controller
      */
     public function index()
     {
-        $services = Service::with(['user', 'branch', 'church','service_category'])->get();
+        $currentChurch = auth::user()->church->first();
+        $services = Service::where('church_id', $currentChurch->id)->with(['user', 'branch', 'church','service_category'])->get();
         // $category = ServiceCategory::all();
-        return view('services.index', compact('services'));
+        return view('church_admin.services.index', compact('services'));
     }
 
     public function show(Service $service)
     {
-        return view('services.show', compact('service'));
+        return view('church_admin.services.show', compact('service'));
     }
 
     /**
@@ -33,10 +34,11 @@ class ChurchAdminServiceController extends Controller
     public function create()
     {
         // dd("nipo hapa");
-        $branches = Branch::all();
-        $churches = Church::all();
+        $currentChurch = auth::user()->church->first();
+        $branches = Branch::where('church_id', $currentChurch->id)->get();
+        $churches = Church::where('church_id', $currentChurch->id)->get();
         $serviceCategories = ServiceCategory::all();
-        return view('services.create', compact('branches', 'churches', 'serviceCategories'));
+        return view('church_admin.services.create', compact('branches', 'churches', 'serviceCategories'));
     }
 
     /**
@@ -68,7 +70,7 @@ class ChurchAdminServiceController extends Controller
 
             // If validation succeeds, proceed with your logic
             Service::create($validatedData);
-            return redirect()->back()->with('success', 'Service report created successfully.');
+            return redirect()->route('church_admin.services')->with('success', 'Service report created successfully.');
         } catch (\Illuminate\Validation\ValidationException $e) {
             // Log the errors for debugging
             \Illuminate\Support\Facades\Log::error('Validation failed', ['errors' => $e->errors()]);
@@ -83,10 +85,10 @@ class ChurchAdminServiceController extends Controller
      */
     public function edit(Service $service)
     {
-        $branches = Branch::all();
-        $churches = Church::all();
+        $branches = Branch::where('church_id',$service->church_id)->get();
+        $churches = Church::where('id',$service->church_id)->get();
         $serviceCategories = ServiceCategory::all();
-        return view('services.edit', compact('service', 'branches', 'churches', 'serviceCategories'));
+        return view('church_admin.services.edit', compact('service', 'branches', 'churches', 'serviceCategories'));
     }
 
     /**
@@ -109,16 +111,16 @@ class ChurchAdminServiceController extends Controller
                 'baptism_spirit' => 'nullable|integer|min:0',
                 'new_birth' => 'nullable|integer|min:0',
                 'first_timers' => 'nullable|integer|min:0',
-                // 'user_id' => 'required|exists:users,id',
+                'user_id' => 'required|exists:users,id',
                 'branch_id' => 'required|exists:branches,id',
                 'church_id' => 'required|exists:churches,id',
             ]);
 
-            $validatedData['user_id'] = Auth::user()->id;
+            // dd($validatedData);
 
             // If validation succeeds, proceed with your logic
             $service->update($validatedData);
-            return redirect()->route('services')->with('success', 'Service report created successfully.');
+            return redirect()->route('church_admin.services')->with('success', 'Service report created successfully.');
         } catch (\Illuminate\Validation\ValidationException $e) {
             // Log the errors for debugging
             \Illuminate\Support\Facades\Log::error('Validation failed', ['errors' => $e->errors()]);
@@ -132,7 +134,11 @@ class ChurchAdminServiceController extends Controller
      */
     public function destroy(Service $service)
     {
+        try{
         $service->delete();
-        return redirect()->route('services')->with('success', 'Service report deleted successfully.');
+        return redirect()->route('church_admin.services')->with('success', 'Service report deleted successfully.');
+        } catch(\Exception $e){
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 }

@@ -22,6 +22,9 @@ class ChurchAdminMemberController extends Controller
     {
         $currentChurch = auth::user()->church->first();
         $members = Member::where('church_id', $currentChurch->id)->with(['user', 'branch', 'church'])->get();
+
+        //get all   roles
+        $roles = \Spatie\Permission\Models\Role::all();
         return view('church_admin.members.index', compact('members'));
     }
 
@@ -33,7 +36,7 @@ class ChurchAdminMemberController extends Controller
         $users = User::all();
         $branches = Branch::all();
         $churches = Church::all();
-        return view('members.create', compact('users', 'branches', 'churches'));
+        return view('church_admin.members.create', compact('users', 'branches', 'churches'));
     }
 
     /**
@@ -55,8 +58,8 @@ class ChurchAdminMemberController extends Controller
                 // 'phone_number' => 'nullable|string|max:15',
                 'gender' => 'nullable|in:male,female',
             ]);
-            
-            
+
+
             $user = User::create([
                 'name' => $request['name'],
                 'email' => $request['email'],
@@ -64,14 +67,14 @@ class ChurchAdminMemberController extends Controller
             ]);
             // Assign default role & permission
             $user->assignRole('member');
-            
+
             $request['user_id'] = $user->id;
-            
+
             // dd($request->all());
 
             Member::create($request->all());
 
-            return redirect()->back()->with('success', 'Member added successfully.');
+            return redirect()->route('church_admin.members')->with('success', 'Member added successfully.');
         } catch (\Exception $e) {
             return redirect()->back()->withInput()->withErrors($validated)->with('error', $e->getMessage());
         }
@@ -85,12 +88,12 @@ class ChurchAdminMemberController extends Controller
         $users = User::all();
         $branches = Branch::all();
         $churches = Church::all();
-        return view('members.edit', compact('member', 'users', 'branches', 'churches'));
+        return view('church_admin.members.edit', compact('member', 'users', 'branches', 'churches'));
     }
 
     public function show(Member $member)
     {
-        return view('members.show', compact('member'));
+        return view('church_admin.members.show', compact('member'));
     }
 
     /**
@@ -98,20 +101,44 @@ class ChurchAdminMemberController extends Controller
      */
     public function update(Request $request, Member $member)
     {
-        $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'branch_id' => 'required|exists:branches,id',
-            'church_id' => 'required|exists:churches,id',
-            'status' => 'nullable|string|max:255',
-            'description' => 'nullable|string',
-            'date_of_birth' => 'nullable|date',
-            'phone_number' => 'nullable|string|max:15',
-            'gender' => 'nullable|in:male,female,other',
-        ]);
+        $validatedData = null;
+        try {
+            $validatedData = $request->validate([
+                'user_id' => 'required|exists:users,id',
+                'email' => 'required|email',
+                'name' => 'required|string|max:255',
+                'branch_id' => 'required|exists:branches,id',
+                'church_id' => 'required|exists:churches,id',
+                'status' => 'nullable|string|max:255',
+                'description' => 'nullable|string',
+                'date_of_birth' => 'nullable|date',
+                'phone_number' => 'nullable|string|max:15',
+                'gender' => 'nullable|in:male,female,other',
 
-        $member->update($request->all());
+                // validate roles collected in roles[], member must have atleast one role
+                'roles' => 'required|array|min:1',
+                'roles.*' => 'required|exists:roles,name',  // validate each role in roles[]
+            ]);
 
-        return redirect()->route('members')->with('success', 'Member updated successfully.');
+            // dd($validatedData);
+
+            // update user
+            $user = User::find($validatedData['user_id']);
+            $user->update([
+                'name' => $validatedData['name'],
+                'email' => $validatedData['email'],
+            ]);
+
+            //update roles
+            $user->syncRoles($validatedData['roles']);            
+            
+            //update member
+            $member->update($validatedData);
+
+            return redirect()->route('church_admin.members')->with('success', 'Member updated successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withInput()->withErrors($validatedData)->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -119,7 +146,39 @@ class ChurchAdminMemberController extends Controller
      */
     public function destroy(Member $member)
     {
+        try{
         $member->delete();
-        return redirect()->route('members')->with('success', 'Member deleted successfully.');
+
+        //delete associated user too
+        $user = User::find($member->user_id);
+        $user->delete();
+
+        return redirect()->route('church_admin.members')->with('success', 'Member deleted successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    //function to assignRole to a member
+    public function assignRole(Request $request)
+    {
+        // dd($request->all());
+        $validatedData = null;
+        try {
+            $validatedData = $request->validate([
+                'role' => 'required|exists:roles,name',
+                'member_id' => 'required|exists:members,id',
+            ]);
+
+            // dd($validatedData);
+
+            $member = Member::find($validatedData['member_id']);
+            $user = User::find($member->user_id);
+            $user->assignRole($validatedData['role']);
+
+            return redirect()->route('church_admin.members')->with('success', 'Role assigned successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withInput()->withErrors($validatedData)->with('error', $e->getMessage());
+        }
     }
 }

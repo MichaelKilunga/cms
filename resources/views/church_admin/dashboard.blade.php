@@ -261,7 +261,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                     </div>
-                    <form action="{{ route('church_admin.service.store') }}" method="POST">
+                    <form action="{{ route('church_admin.services.store') }}" method="POST">
                         @csrf
                         <div class="modal-body mb-3">
                             <label for="name" class="form-label text-primary">Service Name</label>
@@ -272,7 +272,7 @@
                             <select name="service_category_id"  class="form-select chosen" required>
                                 <option value="">Select Service Category</option>
                                 @isset(Auth::user()->church->first()->name)
-                                    @foreach ( App\Models\serviceCategory::where('status','active')->get() as $serviceCategory)
+                                    @foreach ( App\Models\serviceCategory::where('status','active')->where('church_id', Auth::user()->church->first()->id)->get() as $serviceCategory)
                                         <option value="{{ $serviceCategory->id }}">{{ $serviceCategory->name }}</option>
                                     @endforeach
                                 @endisset
@@ -374,7 +374,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                     </div>
-                    <form action="{{ route('church_admin.finance.store') }}" method="POST">
+                    <form action="{{ route('church_admin.finances.store') }}" method="POST">
                         @csrf                        
                         <div class="modal-body mb-3">
                             <label for="service_id" class="form-label text-primary">Service</label>
@@ -473,7 +473,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                     </div>
-                    <form action="{{ route('church_admin.service_category.store') }}" method="POST">
+                    <form action="{{ route('church_admin.service_categories.store') }}" method="POST">
                         @csrf
                         <div class="modal-body mb-3">
                             <label for="name" class="form-label">Category Name</label>

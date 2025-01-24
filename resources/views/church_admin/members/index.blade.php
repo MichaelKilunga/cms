@@ -4,7 +4,9 @@
     <div class="container">
         <div class="mt-4 d-flex justify-content-between">
             <h2 class="h3 text-primary">Members</h2>
-            <a href="{{ route('members.create') }}" class="btn btn-primary mb-3">Add New Member</a>
+            {{-- button to activate assign role modal --}}
+            <button class="btn btn-danger mb-3" data-bs-toggle="modal" data-bs-target="#assignRoleModal">Assign Role</button>
+            <a href="{{ route('church_admin.members.create') }}" class="btn btn-primary mb-3">Add New Member</a>
         </div>
         <table class="table table-bordered">
             <thead>
@@ -26,9 +28,11 @@
                         <td>{{ $member->status }}</td>
                         <td>{{ $member->phone_number }}</td>
                         <td>
-                            <a href="{{ route('members.edit', $member->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                            <a href="{{ route('members.show', $member->id) }}" class="btn btn-success btn-sm">show</a>
-                            <form action="{{ route('members.destroy', $member->id) }}" method="POST"
+                            <a href="{{ route('church_admin.members.edit', $member->id) }}"
+                                class="btn btn-warning btn-sm">Edit</a>
+                            <a href="{{ route('church_admin.members.show', $member->id) }}"
+                                class="btn btn-success btn-sm">show</a>
+                            <form action="{{ route('church_admin.members.destroy', $member->id) }}" method="POST"
                                 style="display:inline;">
                                 @csrf
                                 @method('DELETE')
@@ -40,5 +44,50 @@
                 @endforeach
             </tbody>
         </table>
+    </div>
+
+    {{-- MODEL TO ASSIGN NEW ROLE TO MEMBERS --}}
+    <div class="modal fade" id="assignRoleModal" tabindex="-1" aria-labelledby="assignRoleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{ route('church_admin.members.assign_role') }}" method="POST">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="assignRoleModalLabel">Assign Role to Member</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <input type="hidden" name="member_id" id="member_id">
+                    <div class="modal-body row">
+                        <div class="col-md-6">
+                            <div class="form-group  mb-3">
+                                <label for="role">Role</label>
+                                <select name="role" id="role" class="form-control chosen">
+                                    <option value="">Select Role</option>
+                                    @foreach (\Spatie\Permission\Models\Role::all() as $role)
+                                        @if ($role->name != 'super admin')
+                                            <option value="{{ $role->name }}">{{ $role->name }}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            {{-- user to assign role to --}}
+                            <div class="form-group mb-3">
+                                <label for="user">User</label>
+                                <select name="member_id" id="member" class="form-control chosen">
+                                    <option value="">Select User</option>
+                                    @foreach (\App\Models\Member::where('church_id', Auth::user()->church->first()->id)->with('user')->get() as $member)
+                                        <option value="{{ $member->id }}">{{ $member->user->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Assign Role</button>
+                        </div>
+                </form>
+            </div>
+        </div>
     </div>
 @endsection

@@ -7,8 +7,12 @@
         <div class="card-body">
             <p><strong>Name:</strong> {{ $serviceCategory->name }}</p>
             <p><strong>Status:</strong> {{ ucfirst($serviceCategory->status) }}</p>
+            <p><strong>Description:</strong> {{ $serviceCategory->description }}</p>
+            <p><strong>Branch:</strong> {{ $serviceCategory->branch->name }}</p>
+            <p><strong>Church:</strong> {{ $serviceCategory->church->name }}</p>
+            <p><strong>Admin:</strong> {{ $serviceCategory->user->name }}</p>
         </div>
     </div>
-    <a href="{{ route('service_categories') }}" class="btn btn-primary mt-3">Back to List</a>
+    <a href="{{ route('church_admin.service_categories') }}" class="btn btn-primary mt-3">Back to List</a>
 </div>
 @endsection

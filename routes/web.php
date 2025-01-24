@@ -140,24 +140,25 @@ Route::middleware(['auth', 'can:manage church'])->group(function () {
     Route::get('church_admin/members/{member}/edit', [ChurchAdminMemberController::class, 'edit'])->name('church_admin.members.edit');
     Route::put('church_admin/members/{member}', [ChurchAdminMemberController::class, 'update'])->name('church_admin.members.update');
     Route::delete('church_admin/members/{member}', [ChurchAdminMemberController::class, 'destroy'])->name('church_admin.members.destroy');
+    Route::post('church_admin/members/assign_role', [ChurchAdminMemberController::class, 'assignRole'])->name('church_admin.members.assign_role'); //church_admin.members.assign_role
 
     // // SERVICES ROUTES
-    // Route::get('services', [ServiceController::class, 'index'])->name('services');
-    // Route::get('services/create', [ServiceController::class, 'create'])->name('services.create');
-    Route::post('church_admin/services', [ChurchAdminServiceController::class, 'store'])->name('church_admin.service.store');
-    // Route::get('services/{service}', [ServiceController::class, 'show'])->name('services.show');
-    // Route::get('services/{service}/edit', [ServiceController::class, 'edit'])->name('services.edit');
-    // Route::put('services/{service}', [ServiceController::class, 'update'])->name('services.update');
-    // Route::delete('services/{service}', [ServiceController::class, 'destroy'])->name('services.destroy');
+    Route::get('church_admin/services', [ChurchAdminServiceController::class, 'index'])->name('church_admin.services');
+    Route::get('church_admin/services/create', [ChurchAdminServiceController::class, 'create'])->name('church_admin.services.create');
+    Route::post('church_admin/church_admin/services', [ChurchAdminServiceController::class, 'store'])->name('church_admin.services.store');
+    Route::get('church_admin/services/{service}', [ChurchAdminServiceController::class, 'show'])->name('church_admin.services.show');
+    Route::get('church_admin/services/{service}/edit', [ChurchAdminServiceController::class, 'edit'])->name('church_admin.services.edit');
+    Route::put('church_admin/services/{service}', [ChurchAdminServiceController::class, 'update'])->name('church_admin.services.update');
+    Route::delete('church_admin/services/{service}', [ChurchAdminServiceController::class, 'destroy'])->name('church_admin.services.destroy');
 
     // // FINANCES ROUTES
-    // Route::get('finances', [FinanceController::class, 'index'])->name('finances');
-    // Route::get('finances/create', [FinanceController::class, 'create'])->name('finances.create');
-    Route::post('church_admin/finances', [ChurchAdminFinanceController::class, 'store'])->name('church_admin.finance.store');
-    // Route::get('finances/{finance}/edit', [FinanceController::class, 'edit'])->name('finances.edit');
-    // Route::get('finances/{finance}', [FinanceController::class, 'show'])->name('finances.show');
-    // Route::put('finances/{finance}', [FinanceController::class, 'update'])->name('finances.update');
-    // Route::delete('finances/{finance}', [FinanceController::class, 'destroy'])->name('finances.destroy');
+    Route::get('church_admin/finances', [ChurchAdminFinanceController::class, 'index'])->name('church_admin.finances');
+    Route::get('church_admin/finances/create', [ChurchAdminFinanceController::class, 'create'])->name('church_admin.finances.create');
+    Route::post('church_admin/finances', [ChurchAdminFinanceController::class, 'store'])->name('church_admin.finances.store');
+    Route::get('church_admin/finances/{finance}/edit', [ChurchAdminFinanceController::class, 'edit'])->name('church_admin.finances.edit');
+    Route::get('church_admin/finances/{finance}', [ChurchAdminFinanceController::class, 'show'])->name('church_admin.finances.show');
+    Route::put('church_admin/finances/{finance}', [ChurchAdminFinanceController::class, 'update'])->name('church_admin.finances.update');
+    Route::delete('church_admin/finances/{finance}', [ChurchAdminFinanceController::class, 'destroy'])->name('church_admin.finances.destroy');
 
     // // MESSAGES ROUTES
     // Route::get('messages', [MessageController::class, 'index'])->name('messages');
@@ -168,13 +169,13 @@ Route::middleware(['auth', 'can:manage church'])->group(function () {
     // Route::put('messages/{message}', [MessageController::class, 'update'])->name('messages.update');
     // Route::delete('messages/{message}', [MessageController::class, 'destroy'])->name('messages.destroy');
 
-    // // MESSAGES ROUTES
-    // Route::get('service_categories', [ServiceCategoryController::class, 'index'])->name('service_categories');
-    // Route::get('service_categories/create', [ServiceCategoryController::class, 'create'])->name('service_categories.create');
-    Route::post('church_admin/service_categories', [ChurchAdminServiceCategoryController::class, 'store'])->name('church_admin.service_category.store');
-    // Route::get('service_categories/{service_category}/edit', [ServiceCategoryController::class, 'edit'])->name('service_categories.edit');
-    // Route::get('service_categories/{service_category}', [ServiceCategoryController::class, 'show'])->name('service_categories.show');
-    // Route::put('service_categories/{service_category}', [ServiceCategoryController::class, 'update'])->name('service_categories.update');
-    // Route::delete('service_categories/{service_category}', [ServiceCategoryController::class, 'destroy'])->name('service_categories.destroy');
+    // // SERVICE CATEGORIES ROUTES
+    Route::get('church_admin/service_categories', [ChurchAdminServiceCategoryController::class, 'index'])->name('church_admin.service_categories');
+    Route::get('church_admin/service_categories/create', [ChurchAdminServiceCategoryController::class, 'create'])->name('church_admin.service_categories.create');
+    Route::post('church_admin/service_categories', [ChurchAdminServiceCategoryController::class, 'store'])->name('church_admin.service_categories.store');
+    Route::get('church_admin/service_categories/{service_category}/edit', [ChurchAdminServiceCategoryController::class, 'edit'])->name('church_admin.service_categories.edit');
+    Route::get('church_admin/service_categories/{service_category}', [ChurchAdminServiceCategoryController::class, 'show'])->name('church_admin.service_categories.show');
+    Route::put('church_admin/service_categories/{service_category}', [ChurchAdminServiceCategoryController::class, 'update'])->name('church_admin.service_categories.update');
+    Route::delete('church_admin/service_categories/{service_category}', [ChurchAdminServiceCategoryController::class, 'destroy'])->name('church_admin.service_categories.destroy');
 
 });

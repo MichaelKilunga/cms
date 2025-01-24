@@ -15,4 +15,16 @@ class ServiceCategory extends Model
         return $this->hasMany(Service::class);
     }
 
+    public function church(){
+        return $this->belongsTo(Church::class);
+    }
+
+    public function branch(){
+        return $this->belongsTo(Branch::class);
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
 }

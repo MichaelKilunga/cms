@@ -14,8 +14,14 @@
             <p><strong>Description:</strong> {{ $member->description }}</p>
             <p><strong>Branch:</strong> {{ $member->branch->name }}</p>
             <p><strong>Church:</strong> {{ $member->church->name }}</p>
+            {{-- Tell all Roles of this member --}}
+            <p><strong>Roles:</strong>
+                @foreach ($member->user->roles as $role)
+                    <span class="badge bg-primary">{{ $role->name }}</span>
+                @endforeach
+            </p>
         </div>
     </div>
-    <a href="{{ route('members') }}" class="btn btn-primary mt-3">Back to List</a>
+    <a href="{{ route('church_admin.members') }}" class="btn btn-primary mt-3">Back to List</a>
 </div>
 @endsection
