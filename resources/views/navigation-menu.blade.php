@@ -237,6 +237,21 @@
                         {{ __('Service Categories') }}
                     </x-nav-link>
                 @endcan
+
+                @can('manage branch')
+                    <x-nav-link href="{{ route('branch_admin.members') }}" :active="request()->routeIs('branch_admin.members')">
+                        {{ __('Members') }}
+                    </x-nav-link>
+                    <x-nav-link href="{{ route('branch_admin.services') }}" :active="request()->routeIs('branch_admin.services')">
+                        {{ __('Services') }}
+                    </x-nav-link>
+                    <x-nav-link href="{{ route('branch_admin.finances') }}" :active="request()->routeIs('branch_admin.finances')">
+                        {{ __('Finances') }}
+                    </x-nav-link>
+                    {{-- <x-nav-link href="{{ route('messages') }}" :active="request()->routeIs('messages')">
+                        {{ __('Messages') }}
+                    </x-nav-link> --}}
+                @endcan
             </div>
         </div>
 

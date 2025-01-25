@@ -5,7 +5,7 @@
     <h2>Finance Report Details</h2>
     <div class="card">
         <div class="card-body">
-            <h4>Service: {{ $finance->service_category->name }}</h4>
+            <h4>Service: {{ $finance->service->name }}</h4>
             <p><strong>Date:</strong> {{ $finance->date }}</p>
             <p><strong>Worship Offering:</strong> {{ $finance->worship_offering }} TZS</p>
             <p><strong>Tithe Offering:</strong> {{ $finance->tithe_offering }} TZS</p>
@@ -20,6 +20,6 @@
             <p><strong>Report Date:</strong> {{ $finance->created_at->format('Y-m-d H:i:s') }}</p>
         </div>
     </div>
-    <a href="{{ route('finances') }}" class="btn btn-primary mt-3">Back to List</a>
+    <a href="{{ route('church_admin.finances') }}" class="btn btn-primary mt-3">Back to List</a>
 </div>
 @endsection

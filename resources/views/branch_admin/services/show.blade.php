@@ -27,6 +27,6 @@
             <p><strong>Filed By:</strong> {{ $service->user->name }}</p>
         </div>
     </div>
-    <a href="{{ route('services') }}" class="btn btn-primary mt-3">Back to List</a>
+    <a href="{{ route('church_admin.services') }}" class="btn btn-primary mt-3">Back to List</a>
 </div>
 @endsection

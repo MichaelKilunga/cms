@@ -10,6 +10,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\ServiceCategoryController;
 use App\Http\Controllers\ServiceController;
+// church admin
 use App\Http\Controllers\church_admin\ChurchAdminController;
 use App\Http\Controllers\church_admin\ChurchAdminBranchController;
 use App\Http\Controllers\church_admin\ChurchAdminMemberController;
@@ -17,6 +18,14 @@ use App\Http\Controllers\church_admin\ChurchAdminServiceController;
 use App\Http\Controllers\church_admin\ChurchAdminFinanceController;
 use App\Http\Controllers\church_admin\ChurchAdminRolePermissionController;
 use App\Http\Controllers\church_admin\ChurchAdminServiceCategoryController;
+// branch admin
+use App\Http\Controllers\branch_admin\BranchAdminController;
+use App\Http\Controllers\branch_admin\BranchAdminBranchController;
+use App\Http\Controllers\branch_admin\BranchAdminMemberController;
+use App\Http\Controllers\branch_admin\BranchAdminServiceController;
+use App\Http\Controllers\branch_admin\BranchAdminFinanceController;
+use App\Http\Controllers\branch_admin\BranchAdminRolePermissionController;
+use App\Http\Controllers\branch_admin\BranchAdminServiceCategoryController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -178,4 +187,44 @@ Route::middleware(['auth', 'can:manage church'])->group(function () {
     Route::put('church_admin/service_categories/{service_category}', [ChurchAdminServiceCategoryController::class, 'update'])->name('church_admin.service_categories.update');
     Route::delete('church_admin/service_categories/{service_category}', [ChurchAdminServiceCategoryController::class, 'destroy'])->name('church_admin.service_categories.destroy');
 
+});
+
+
+Route::middleware(['auth', 'can:manage branch'])->group(function () {
+    // // MEMBERS ROUTES
+    Route::get('branch_admin/members', [BranchAdminMemberController::class, 'index'])->name('branch_admin.members');
+    Route::get('branch_admin/members/create', [BranchAdminMemberController::class, 'create'])->name('branch_admin.members.create');
+    Route::post('branch_admin/members', [BranchAdminMemberController::class, 'store'])->name('branch_admin.member.store');
+    Route::get('branch_admin/members/{member}', [BranchAdminMemberController::class, 'show'])->name('branch_admin.members.show');
+    Route::get('branch_admin/members/{member}/edit', [BranchAdminMemberController::class, 'edit'])->name('branch_admin.members.edit');
+    Route::put('branch_admin/members/{member}', [BranchAdminMemberController::class, 'update'])->name('branch_admin.members.update');
+    Route::delete('branch_admin/members/{member}', [BranchAdminMemberController::class, 'destroy'])->name('branch_admin.members.destroy');
+    Route::post('branch_admin/members/assign_role', [BranchAdminMemberController::class, 'assignRole'])->name('branch_admin.members.assign_role'); //branch_admin.members.assign_role
+
+    // // SERVICES ROUTES
+    Route::get('branch_admin/services', [BranchAdminServiceController::class, 'index'])->name('branch_admin.services');
+    Route::get('branch_admin/services/create', [BranchAdminServiceController::class, 'create'])->name('branch_admin.services.create');
+    Route::post('branch_admin/branch_admin/services', [BranchAdminServiceController::class, 'store'])->name('branch_admin.services.store');
+    Route::get('branch_admin/services/{service}', [BranchAdminServiceController::class, 'show'])->name('branch_admin.services.show');
+    Route::get('branch_admin/services/{service}/edit', [BranchAdminServiceController::class, 'edit'])->name('branch_admin.services.edit');
+    Route::put('branch_admin/services/{service}', [BranchAdminServiceController::class, 'update'])->name('branch_admin.services.update');
+    Route::delete('branch_admin/services/{service}', [BranchAdminServiceController::class, 'destroy'])->name('branch_admin.services.destroy');
+
+    // // FINANCES ROUTES
+    Route::get('branch_admin/finances', [BranchAdminFinanceController::class, 'index'])->name('branch_admin.finances');
+    Route::get('branch_admin/finances/create', [BranchAdminFinanceController::class, 'create'])->name('branch_admin.finances.create');
+    Route::post('branch_admin/finances', [BranchAdminFinanceController::class, 'store'])->name('branch_admin.finances.store');
+    Route::get('branch_admin/finances/{finance}/edit', [BranchAdminFinanceController::class, 'edit'])->name('branch_admin.finances.edit');
+    Route::get('branch_admin/finances/{finance}', [BranchAdminFinanceController::class, 'show'])->name('branch_admin.finances.show');
+    Route::put('branch_admin/finances/{finance}', [BranchAdminFinanceController::class, 'update'])->name('branch_admin.finances.update');
+    Route::delete('branch_admin/finances/{finance}', [BranchAdminFinanceController::class, 'destroy'])->name('branch_admin.finances.destroy');
+
+    // // MESSAGES ROUTES
+    // Route::get('messages', [MessageController::class, 'index'])->name('messages');
+    // Route::get('messages/create', [MessageController::class, 'create'])->name('messages.create');
+    // Route::post('messages', [MessageController::class, 'store'])->name('messages.store');
+    // Route::get('messages/{message}/edit', [MessageController::class, 'edit'])->name('messages.edit');
+    // Route::get('messages/{message}', [MessageController::class, 'show'])->name('messages.show');
+    // Route::put('messages/{message}', [MessageController::class, 'update'])->name('messages.update');
+    // Route::delete('messages/{message}', [MessageController::class, 'destroy'])->name('messages.destroy');
 });
