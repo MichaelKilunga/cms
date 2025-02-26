@@ -26,6 +26,15 @@ use App\Http\Controllers\branch_admin\BranchAdminServiceController;
 use App\Http\Controllers\branch_admin\BranchAdminFinanceController;
 use App\Http\Controllers\branch_admin\BranchAdminRolePermissionController;
 use App\Http\Controllers\branch_admin\BranchAdminServiceCategoryController;
+// branch pastor
+use App\Http\Controllers\branch_pastor\BranchPastorController;
+use App\Http\Controllers\branch_pastor\BranchPastorBranchController;
+use App\Http\Controllers\branch_pastor\BranchPastorMemberController;
+use App\Http\Controllers\branch_pastor\BranchPastorServiceController;
+use App\Http\Controllers\branch_pastor\BranchPastorFinanceController;
+use App\Http\Controllers\branch_pastor\BranchPastorRolePermissionController;
+use App\Http\Controllers\branch_pastor\BranchPastorServiceCategoryController;
+
 
 use Illuminate\Support\Facades\Route;
 
@@ -218,6 +227,49 @@ Route::middleware(['auth', 'can:manage branch'])->group(function () {
     Route::get('branch_admin/finances/{finance}', [BranchAdminFinanceController::class, 'show'])->name('branch_admin.finances.show');
     Route::put('branch_admin/finances/{finance}', [BranchAdminFinanceController::class, 'update'])->name('branch_admin.finances.update');
     Route::delete('branch_admin/finances/{finance}', [BranchAdminFinanceController::class, 'destroy'])->name('branch_admin.finances.destroy');
+
+    // // MESSAGES ROUTES
+    // Route::get('messages', [MessageController::class, 'index'])->name('messages');
+    // Route::get('messages/create', [MessageController::class, 'create'])->name('messages.create');
+    // Route::post('messages', [MessageController::class, 'store'])->name('messages.store');
+    // Route::get('messages/{message}/edit', [MessageController::class, 'edit'])->name('messages.edit');
+    // Route::get('messages/{message}', [MessageController::class, 'show'])->name('messages.show');
+    // Route::put('messages/{message}', [MessageController::class, 'update'])->name('messages.update');
+    // Route::delete('messages/{message}', [MessageController::class, 'destroy'])->name('messages.destroy');
+});
+
+Route::middleware(['auth', 'can:pastor branch'])->group(function () {
+    // // MEMBERS ROUTES
+    Route::get('branch_pastor/members', [BranchPastorMemberController::class, 'index'])->name('branch_pastor.members');
+    Route::get('branch_pastor/members/create', [BranchPastorMemberController::class, 'create'])->name('branch_pastor.members.create');
+    Route::post('branch_pastor/members', [BranchPastorMemberController::class, 'store'])->name('branch_pastor.member.store');
+    Route::get('branch_pastor/members/{member}', [BranchPastorMemberController::class, 'show'])->name('branch_pastor.members.show');
+    Route::get('branch_pastor/members/{member}/edit', [BranchPastorMemberController::class, 'edit'])->name('branch_pastor.members.edit');
+    Route::put('branch_pastor/members/{member}', [BranchPastorMemberController::class, 'update'])->name('branch_pastor.members.update');
+    Route::delete('branch_pastor/members/{member}', [BranchPastorMemberController::class, 'destroy'])->name('branch_pastor.members.destroy');
+    Route::post('branch_pastor/members/assign_role', [BranchPastorMemberController::class, 'assignRole'])->name('branch_pastor.members.assign_role'); //branch_pastor.members.assign_role
+
+    // // SERVICES ROUTES
+    Route::get('branch_pastor/services', [BranchPastorServiceController::class, 'index'])->name('branch_pastor.services');
+    Route::get('branch_pastor/services/create', [BranchPastorServiceController::class, 'create'])->name('branch_pastor.services.create');
+    Route::post('branch_pastor/branch_pastor/services', [BranchPastorServiceController::class, 'store'])->name('branch_pastor.services.store');
+    Route::get('branch_pastor/services/{service}', [BranchPastorServiceController::class, 'show'])->name('branch_pastor.services.show');
+    Route::get('branch_pastor/services/{service}/edit', [BranchPastorServiceController::class, 'edit'])->name('branch_pastor.services.edit');
+    Route::put('branch_pastor/services/{service}', [BranchPastorServiceController::class, 'update'])->name('branch_pastor.services.update');
+    Route::delete('branch_pastor/services/{service}', [BranchPastorServiceController::class, 'destroy'])->name('branch_pastor.services.destroy');
+    
+    Route::get('branch_pastor/services/approve/{id}', [BranchPastorServiceController::class, 'approveServiceReport'])->name('branch_pastor.services.approve');
+
+    // // FINANCES ROUTES
+    Route::get('branch_pastor/finances', [BranchPastorFinanceController::class, 'index'])->name('branch_pastor.finances');
+    Route::get('branch_pastor/finances/create', [BranchPastorFinanceController::class, 'create'])->name('branch_pastor.finances.create');
+    Route::post('branch_pastor/finances', [BranchPastorFinanceController::class, 'store'])->name('branch_pastor.finances.store');
+    Route::get('branch_pastor/finances/{finance}/edit', [BranchPastorFinanceController::class, 'edit'])->name('branch_pastor.finances.edit');
+    Route::get('branch_pastor/finances/{finance}', [BranchPastorFinanceController::class, 'show'])->name('branch_pastor.finances.show');
+    Route::put('branch_pastor/finances/{finance}', [BranchPastorFinanceController::class, 'update'])->name('branch_pastor.finances.update');
+    Route::delete('branch_pastor/finances/{finance}', [BranchPastorFinanceController::class, 'destroy'])->name('branch_pastor.finances.destroy');
+    
+    Route::get('branch_pastor/finances/approve/{id}', [BranchPastorFinanceController::class, 'approveFinanceReport'])->name('branch_pastor.finances.approve');
 
     // // MESSAGES ROUTES
     // Route::get('messages', [MessageController::class, 'index'])->name('messages');

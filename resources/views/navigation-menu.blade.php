@@ -103,11 +103,17 @@
                     <span class="inline-flex rounded-md">
                         <p id="clock#"
                             class="inline-flex items-center px-3 mx-2# py-2  text-sm leading-4 font-medium rounded-md text-gray-500 text-primary dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-700 active:bg-gray-50 dark:active:bg-gray-700 transition ease-in-out duration-150">
-                            {{-- @can('manage system') --}}
-                            @isset(Auth::user()->church->first()->name)
-                                {{ Auth::user()->church->first()->name }}
-                            @endisset
-                            {{-- @endcan --}}
+                            @can('manage church')
+                                @isset(Auth::user()->church->first()->name)
+                                    {{ Auth::user()->church->first()->name }}
+                                @endisset
+                            @endcan
+                            @can('manage branch')
+                                {{ Auth::user()->members->first()->branch->name }}
+                            @endcan                            
+                            @can('pastor branch')
+                                {{ Auth::user()->members->first()->branch->name }}
+                            @endcan
                         </p>
                     </span>
                     <x-dropdown align="right" width="48">
@@ -252,6 +258,24 @@
                         {{ __('Messages') }}
                     </x-nav-link> --}}
                 @endcan
+
+                @can('pastor branch')
+                    <x-nav-link href="{{ route('branch_pastor.members') }}" :active="request()->routeIs('branch_pastor.members')">
+                        {{ __('Members') }}
+                    </x-nav-link>
+                    <x-nav-link href="{{ route('branch_pastor.services') }}" :active="request()->routeIs('branch_pastor.services')">
+                        {{ __('Services') }}
+                    </x-nav-link>
+                    <x-nav-link href="{{ route('branch_pastor.finances') }}" :active="request()->routeIs('branch_pastor.finances')">
+                        {{ __('Finances') }}
+                    </x-nav-link>
+                    <x-nav-link href="{{ route('messages') }}" :active="request()->routeIs('messages')">
+                        {{ __('Report') }}
+                    </x-nav-link>
+                    {{-- <x-nav-link href="{{ route('messages') }}" :active="request()->routeIs('messages')">
+                        {{ __('Messages') }}
+                    </x-nav-link> --}}
+                @endcan
             </div>
         </div>
 
@@ -268,8 +292,8 @@
                 <div class="flex items-center px-4">
                     @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
                         <div class="shrink-0 me-3">
-                            <img class="size-10 rounded-full object-cover" src="{{ Auth::user()->profile_photo_url }}"
-                                alt="{{ Auth::user()->name }}" />
+                            <img class="size-10 rounded-full object-cover"
+                                src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" />
                         </div>
                     @endif
 

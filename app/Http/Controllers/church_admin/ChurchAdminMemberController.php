@@ -44,7 +44,7 @@ class ChurchAdminMemberController extends Controller
      */
     public function store(Request $request)
     {
-        $request['email'] = (trim($request['name']) . '@cms.com');
+        $request['email'] = strtolower(str_replace(' ', '', $request['name'])) . '@cms.com';        
         $validated = null;
         try {
             $validated = $request->validate([
@@ -85,8 +85,9 @@ class ChurchAdminMemberController extends Controller
      */
     public function edit(Member $member)
     {
+        $currentChurch = auth::user()->church->first();
         $users = User::all();
-        $branches = Branch::all();
+        $branches = Branch::where('church_id', $currentChurch->id)->get();
         $churches = Church::all();
         return view('church_admin.members.edit', compact('member', 'users', 'branches', 'churches'));
     }

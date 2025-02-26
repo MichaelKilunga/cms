@@ -8,6 +8,9 @@ use App\Models\ServiceCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\Models\Branch;
+use App\Models\Church;
+use App\Models\Member;
 
 class BranchAdminFinanceController extends Controller
 {
@@ -16,10 +19,14 @@ class BranchAdminFinanceController extends Controller
      */
     public function index()
     {
-        $currentChurch = auth::user()->church->first();
-        $finances = Finance::where('church_id', $currentChurch->id)->with('service')->get();
+        $currentMember = Member::where('user_id', Auth::user()->id)->first();
+        $currentChurch = Church::where('id', $currentMember->church_id)->first();
+        $currentBranch = Branch::where('id', $currentMember->branch_id)->first();
+
+        $services = Service::where('church_id', $currentChurch->id)->where('branch_id', $currentBranch->id)->with(['user', 'branch', 'church','service_category'])->get();
+        $finances = Finance::where('church_id', $currentChurch->id)->where('branch_id', $currentBranch->id)->with('service')->get();
         // dd($finances    );
-        return view('branch_admin.finances.index', compact('finances'));
+        return view('branch_admin.finances.index', compact('finances', 'services'));
     }
 
     public function show(Finance $finance)
@@ -35,10 +42,13 @@ class BranchAdminFinanceController extends Controller
      */
     public function create()
     {
-        $currentChurch = auth::user()->church->first();
-        $services = Service::where('church_id', $currentChurch->id)->get();
+        $currentMember = Member::where('user_id', Auth::user()->id)->first();
+        $currentChurch = Church::where('id', $currentMember->church_id)->first();
+        $currentBranch = Branch::where('id', $currentMember->branch_id)->first();
+        
+        $services = Service::where('church_id', $currentChurch->id)->where('branch_id', $currentBranch->id)->with(['user', 'branch', 'church','service_category'])->get();
         // $serviceCategories = ServiceCategory::all();
-        return view('branch_admin.finances.create', compact('services',));
+        return view('branch_admin.finances.create', compact('services', 'currentChurch', 'currentBranch'));
     }
 
     /**
@@ -50,7 +60,7 @@ class BranchAdminFinanceController extends Controller
         // dd($request->all());
         try {
             $validatedData = $request->validate([
-                'service_id' => 'required|exists:services,id',
+                'service_id' => 'required|exists:services,id|unique:finances,service_id',
                 'date' => 'required|date',
                 'worship_offering' => 'nullable|numeric|min:0',
                 'tithe_offering' => 'nullable|numeric|min:0',
@@ -84,9 +94,13 @@ class BranchAdminFinanceController extends Controller
      */
     public function edit(Finance $finance)
     {
-        $currentChurch = auth::user()->church->first();
-        $services = Service::where('church_id', $currentChurch->id)->get();
-        return view('branch_admin.finances.edit', compact('finance',  'services'));
+        $currentMember = Member::where('user_id', Auth::user()->id)->first();
+        $currentChurch = Church::where('id', $currentMember->church_id)->first();
+        $currentBranch = Branch::where('id', $currentMember->branch_id)->first();
+        
+        $services = Service::where('church_id', $currentChurch->id)->where('branch_id', $currentBranch->id)->with(['user', 'branch', 'church','service_category'])->get();
+       
+        return view('branch_admin.finances.edit', compact('finance',  'services', 'currentChurch', 'currentBranch'));
     }
 
     /**

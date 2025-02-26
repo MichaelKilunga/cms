@@ -9,6 +9,7 @@ use App\Models\ServiceCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\Models\Member;
 
 class BranchAdminServiceController extends Controller
 {
@@ -17,10 +18,12 @@ class BranchAdminServiceController extends Controller
      */
     public function index()
     {
-        $currentChurch = auth::user()->church->first();
-        $services = Service::where('church_id', $currentChurch->id)->with(['user', 'branch', 'church','service_category'])->get();
-        // $category = ServiceCategory::all();
-        return view('branch_admin.services.index', compact('services'));
+        $currentMember = Member::where('user_id', Auth::user()->id)->first();
+        $currentChurch = Church::where('id', $currentMember->church_id)->first();
+        $currentBranch = Branch::where('id', $currentMember->branch_id)->first();
+        $serviceCategories = ServiceCategory::where('church_id', $currentChurch->id)->get();
+        $services = Service::where('church_id', $currentChurch->id)->where('branch_id', $currentBranch->id)->with(['user', 'branch', 'church','service_category'])->get();
+        return view('branch_admin.services.index', compact('services', 'serviceCategories'));
     }
 
     public function show(Service $service)
@@ -34,11 +37,12 @@ class BranchAdminServiceController extends Controller
     public function create()
     {
         // dd("nipo hapa");
-        $currentChurch = auth::user()->church->first();
-        $branches = Branch::where('church_id', $currentChurch->id)->get();
-        $churches = Church::where('church_id', $currentChurch->id)->get();
-        $serviceCategories = ServiceCategory::all();
-        return view('branch_admin.services.create', compact('branches', 'churches', 'serviceCategories'));
+        $currentMember = Member::where('user_id', Auth::user()->id)->first();
+        $currentChurch = Church::where('id', $currentMember->church_id)->first();
+        $currentBranch = Branch::where('id', $currentMember->branch_id)->first();
+        $serviceCategories = ServiceCategory::where('church_id', $currentChurch->id)->get();
+        // dd($serviceCategories);
+        return view('branch_admin.services.create', compact('currentBranch', 'currentChurch', 'serviceCategories'));
     }
 
     /**
@@ -120,7 +124,7 @@ class BranchAdminServiceController extends Controller
 
             // If validation succeeds, proceed with your logic
             $service->update($validatedData);
-            return redirect()->route('branch_admin.services')->with('success', 'Service report created successfully.');
+            return redirect()->route('branch_admin.services')->with('success', 'Service report updated successfully.');
         } catch (\Illuminate\Validation\ValidationException $e) {
             // Log the errors for debugging
             \Illuminate\Support\Facades\Log::error('Validation failed', ['errors' => $e->errors()]);

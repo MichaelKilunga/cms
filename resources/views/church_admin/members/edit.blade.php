@@ -23,7 +23,7 @@
             </div>
             <div class="mb-3">
                 <label for="branch_id" class="form-label">Branch</label>
-                <select name="branch_id" class="form-select" required>
+                <select name="branch_id" class="form-select chosen" required>
                     @foreach ($branches as $branch)
                         <option value="{{ $branch->id }}" {{ $member->branch_id == $branch->id ? 'selected' : '' }}>
                             {{ $branch->name }}

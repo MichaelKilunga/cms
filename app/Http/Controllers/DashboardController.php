@@ -103,10 +103,10 @@ class DashboardController extends Controller
             $church = Church::where('id', $currentMember->church_id);
             $branch = Branch::where('id', $currentMember->branch_id);
 
-            dd($church->first());
+            // dd($church->first());
 
             session(['church_id' => $church->first()->id]);
-            session(['guest_church_admin' => '']);
+            session(['branch_id' => $branch->first()->id]);
 
             if (!Gate::allows('manage branch')) {
                 abort(403, 'You do not have the required permissions.');
@@ -116,10 +116,51 @@ class DashboardController extends Controller
             $totalServices = Service::where('church_id', $church->first()->id)->where('branch_id',  $currentMember->branch_id)->count();
             $totalFinances = Finance::where('church_id', $church->first()->id)->where('branch_id',  $currentMember->branch_id)->count();
 
+            $currentChurch = $church->first();
+            $currentBranch = $branch->first();
+
             return view('branch_admin.dashboard', compact(
                 'totalMembers',
                 'totalServices',
                 'totalFinances',
+                'currentChurch',
+                'currentBranch'
+            ));
+        }
+        if (Gate::allows('pastor branch')) {
+
+            // $totalBranches = 0;
+            $totalMembers = 0;
+            $totalServices = 0;
+            $totalFinances = 0;
+            // $totalServiceCategories = 0;
+
+            $currentMember = Member::where('user_id', Auth::user()->id)->first();
+            $church = Church::where('id', $currentMember->church_id);
+            $branch = Branch::where('id', $currentMember->branch_id);
+
+            // dd($church->first());
+
+            session(['church_id' => $church->first()->id]);
+            session(['branch_id' => $branch->first()->id]);
+
+            if (!Gate::allows('pastor branch')) {
+                abort(403, 'You do not have the required permissions.');
+            }
+
+            $totalMembers = Member::where('church_id', $church->first()->id)->where('branch_id',  $currentMember->branch_id)->count();
+            $totalServices = Service::where('church_id', $church->first()->id)->where('branch_id',  $currentMember->branch_id)->count();
+            $totalFinances = Finance::where('church_id', $church->first()->id)->where('branch_id',  $currentMember->branch_id)->count();
+
+            $currentChurch = $church->first();
+            $currentBranch = $branch->first();
+
+            return view('branch_pastor.dashboard', compact(
+                'totalMembers',
+                'totalServices',
+                'totalFinances',
+                'currentChurch',
+                'currentBranch'
             ));
         }
     }

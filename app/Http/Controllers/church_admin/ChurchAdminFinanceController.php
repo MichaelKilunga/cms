@@ -50,7 +50,7 @@ class ChurchAdminFinanceController extends Controller
         // dd($request->all());
         try {
             $validatedData = $request->validate([
-                'service_id' => 'required|exists:services,id',
+                'service_id' => 'required|exists:services,id|unique:finances,service_id',
                 'date' => 'required|date',
                 'worship_offering' => 'nullable|numeric|min:0',
                 'tithe_offering' => 'nullable|numeric|min:0',

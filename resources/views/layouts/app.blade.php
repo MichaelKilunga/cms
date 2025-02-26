@@ -231,11 +231,16 @@
 
                 // Show the loader when an AJAX request starts
                 $(document).ajaxStart(function() {
-                    if (!isNotificationCheck) { // Only show loader if it's not a notification check
+                    if (!isNotificationCheck && !cancelLoader) { // Only show loader if it's not a notification check
                         $('#loader-overlay').show();
                     }
-                });
-
+                    if (isNotificationCheck || cancelLoader) { // Only show loader if it's not a notification check
+                        $('#loader-overlay').hide   ();
+                    }
+                    });
+                    
+                    //Controll loader if the request is a request is from a prompt or confirm dialog of the browser
+                   
                 // Hide the loader when the AJAX request completes
                 $(document).ajaxStop(function() {
                     $('#loader-overlay').hide();

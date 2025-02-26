@@ -20,8 +20,10 @@ class BranchAdminMemberController extends Controller
      */
     public function index()
     {
-        $currentChurch = auth::user()->church->first();
-        $members = Member::where('church_id', $currentChurch->id)->with(['user', 'branch', 'church'])->get();
+        $currentMember = Member::where('user_id', Auth::user()->id)->first();
+        $currentChurch = Church::where('id', $currentMember->church_id)->first();
+        $currentBranch = Branch::where('id', $currentMember->branch_id)->first();
+        $members = Member::where('church_id', $currentChurch->id)->where('branch_id', $currentBranch->id)->with(['user','church','branch'])->get();
 
         //get all   roles
         $roles = \Spatie\Permission\Models\Role::all();
@@ -44,7 +46,9 @@ class BranchAdminMemberController extends Controller
      */
     public function store(Request $request)
     {
-        $request['email'] = (trim($request['name']) . '@cms.com');
+        // generate email from the first part of the name apended with @cms.com
+        $request['email'] = strtolower(str_replace(' ', '', $request['name'])) . '@cms.com';        
+
         $validated = null;
         try {
             $validated = $request->validate([
@@ -85,10 +89,10 @@ class BranchAdminMemberController extends Controller
      */
     public function edit(Member $member)
     {
-        $users = User::all();
-        $branches = Branch::all();
-        $churches = Church::all();
-        return view('branch_admin.members.edit', compact('member', 'users', 'branches', 'churches'));
+        // $users = User::all();
+        // $branches = Branch::all();
+        // $churches = Church::all();
+        return view('branch_admin.members.edit', compact('member'));
     }
 
     public function show(Member $member)

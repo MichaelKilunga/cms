@@ -120,7 +120,7 @@ class ChurchAdminServiceController extends Controller
 
             // If validation succeeds, proceed with your logic
             $service->update($validatedData);
-            return redirect()->route('church_admin.services')->with('success', 'Service report created successfully.');
+            return redirect()->route('church_admin.services')->with('success', 'Service report updated successfully.');
         } catch (\Illuminate\Validation\ValidationException $e) {
             // Log the errors for debugging
             \Illuminate\Support\Facades\Log::error('Validation failed', ['errors' => $e->errors()]);

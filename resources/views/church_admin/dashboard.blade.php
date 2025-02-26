@@ -380,12 +380,10 @@
                             <label for="service_id" class="form-label text-primary">Service</label>
                             <select name="service_id" class="form-select chosen" required>
                                 <option value="" selected>--Select Service--</option>
-                                @isset(Auth::user()->church->first()->name)
                                 {{-- get the last 10 services --}}
                                     @foreach (App\Models\Service::where('church_id', Auth::user()->church->first()->id)->orderBy('id', 'desc')->take(10)->get() as $service)
                                         <option value="{{ $service->id }}">{{ $service->name }}</option>
                                     @endforeach
-                                @endisset
                             </select>
                         </div>
                         <div class="modal-body mb-3">
