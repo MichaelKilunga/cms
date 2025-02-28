@@ -269,7 +269,7 @@
                     <x-nav-link href="{{ route('branch_pastor.finances') }}" :active="request()->routeIs('branch_pastor.finances')">
                         {{ __('Finances') }}
                     </x-nav-link>
-                    <x-nav-link href="{{ route('messages') }}" :active="request()->routeIs('messages')">
+                    <x-nav-link href="{{ route('branch_pastor.reports') }}" :active="request()->routeIs('branch_pastor.reports')">
                         {{ __('Report') }}
                     </x-nav-link>
                     {{-- <x-nav-link href="{{ route('messages') }}" :active="request()->routeIs('messages')">

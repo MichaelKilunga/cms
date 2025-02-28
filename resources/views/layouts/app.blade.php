@@ -108,9 +108,9 @@
     <script>
         $(document).ready(function() {
 
-                @if (session('guest_church_admin') == 'true')
-                    $('#guestChurchAdminModal').modal('show');
-                @endif
+            @if (session('guest_church_admin') == 'true')
+                $('#guestChurchAdminModal').modal('show');
+            @endif
 
             @if (session('success'))
                 Swal.fire({
@@ -127,7 +127,7 @@
                     // timer: 2000
                 });
             @endif
-            
+
             @if (session('info'))
                 Swal.fire({
                     icon: 'info',
@@ -230,17 +230,19 @@
                 });
 
                 // Show the loader when an AJAX request starts
-                $(document).ajaxStart(function() {
-                    if (!isNotificationCheck && !cancelLoader) { // Only show loader if it's not a notification check
-                        $('#loader-overlay').show();
-                    }
-                    if (isNotificationCheck || cancelLoader) { // Only show loader if it's not a notification check
-                        $('#loader-overlay').hide   ();
-                    }
-                    });
-                    
-                    //Controll loader if the request is a request is from a prompt or confirm dialog of the browser
-                   
+                // $(document).ajaxStart(function() {
+                //     if (!isNotificationCheck && !
+                //         cancelLoader) { // Only show loader if it's not a notification check
+                //         $('#loader-overlay').show();
+                //     }
+                //     if (isNotificationCheck ||
+                //         cancelLoader) { // Only show loader if it's not a notification check
+                //         $('#loader-overlay').hide();
+                //     }
+                // });
+
+                //Controll loader if the request is a request is from a prompt or confirm dialog of the browser
+
                 // Hide the loader when the AJAX request completes
                 $(document).ajaxStop(function() {
                     $('#loader-overlay').hide();

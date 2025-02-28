@@ -32,6 +32,7 @@ use App\Http\Controllers\branch_pastor\BranchPastorBranchController;
 use App\Http\Controllers\branch_pastor\BranchPastorMemberController;
 use App\Http\Controllers\branch_pastor\BranchPastorServiceController;
 use App\Http\Controllers\branch_pastor\BranchPastorFinanceController;
+use App\Http\Controllers\branch_pastor\BranchPastorReportController;
 use App\Http\Controllers\branch_pastor\BranchPastorRolePermissionController;
 use App\Http\Controllers\branch_pastor\BranchPastorServiceCategoryController;
 
@@ -127,7 +128,6 @@ Route::middleware(['auth', 'can:manage system'])->group(function () {
     Route::get('service_categories/{service_category}', [ServiceCategoryController::class, 'show'])->name('service_categories.show');
     Route::put('service_categories/{service_category}', [ServiceCategoryController::class, 'update'])->name('service_categories.update');
     Route::delete('service_categories/{service_category}', [ServiceCategoryController::class, 'destroy'])->name('service_categories.destroy');
-
 });
 
 
@@ -195,7 +195,6 @@ Route::middleware(['auth', 'can:manage church'])->group(function () {
     Route::get('church_admin/service_categories/{service_category}', [ChurchAdminServiceCategoryController::class, 'show'])->name('church_admin.service_categories.show');
     Route::put('church_admin/service_categories/{service_category}', [ChurchAdminServiceCategoryController::class, 'update'])->name('church_admin.service_categories.update');
     Route::delete('church_admin/service_categories/{service_category}', [ChurchAdminServiceCategoryController::class, 'destroy'])->name('church_admin.service_categories.destroy');
-
 });
 
 
@@ -257,7 +256,7 @@ Route::middleware(['auth', 'can:pastor branch'])->group(function () {
     Route::get('branch_pastor/services/{service}/edit', [BranchPastorServiceController::class, 'edit'])->name('branch_pastor.services.edit');
     Route::put('branch_pastor/services/{service}', [BranchPastorServiceController::class, 'update'])->name('branch_pastor.services.update');
     Route::delete('branch_pastor/services/{service}', [BranchPastorServiceController::class, 'destroy'])->name('branch_pastor.services.destroy');
-    
+
     Route::get('branch_pastor/services/approve/{id}', [BranchPastorServiceController::class, 'approveServiceReport'])->name('branch_pastor.services.approve');
 
     // // FINANCES ROUTES
@@ -268,7 +267,7 @@ Route::middleware(['auth', 'can:pastor branch'])->group(function () {
     Route::get('branch_pastor/finances/{finance}', [BranchPastorFinanceController::class, 'show'])->name('branch_pastor.finances.show');
     Route::put('branch_pastor/finances/{finance}', [BranchPastorFinanceController::class, 'update'])->name('branch_pastor.finances.update');
     Route::delete('branch_pastor/finances/{finance}', [BranchPastorFinanceController::class, 'destroy'])->name('branch_pastor.finances.destroy');
-    
+
     Route::get('branch_pastor/finances/approve/{id}', [BranchPastorFinanceController::class, 'approveFinanceReport'])->name('branch_pastor.finances.approve');
 
     // // MESSAGES ROUTES
@@ -279,4 +278,14 @@ Route::middleware(['auth', 'can:pastor branch'])->group(function () {
     // Route::get('messages/{message}', [MessageController::class, 'show'])->name('messages.show');
     // Route::put('messages/{message}', [MessageController::class, 'update'])->name('messages.update');
     // Route::delete('messages/{message}', [MessageController::class, 'destroy'])->name('messages.destroy');
+
+    // // REPORTS ROUTES
+    Route::get('branch_pastor/reports', [BranchPastorReportController::class, 'index'])->name('branch_pastor.reports');
+    Route::get('branch_pastor/reports/filter', [BranchPastorReportController::class, 'filter'])->name('branch_pastor.reports.filter');
+
+    Route::get('branch_pastor/reports/create', [BranchPastorReportController::class, 'create'])->name('branch_pastor.reports.create');
+    Route::get('branch_pastor/reports/{report}/edit', [BranchPastorReportController::class, 'edit'])->name('branch_pastor.reports.edit');
+    Route::get('branch_pastor/reports/{report}', [BranchPastorReportController::class, 'show'])->name('branch_pastor.reports.show');
+    Route::put('branch_pastor/reports/{report}', [BranchPastorReportController::class, 'update'])->name('branch_pastor.reports.update');
+    Route::delete('branch_pastor/reports/{report}', [BranchPastorReportController::class, 'destroy'])->name('branch_pastor.reports.destroy');
 });
