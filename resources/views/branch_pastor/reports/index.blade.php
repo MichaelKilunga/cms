@@ -39,9 +39,9 @@
                         {{-- <option value="">-- Select Category --</option> --}}
                         <option selected value="inflow">Inflow</option>
                         <option value="services">Services</option>
-                        <option value="members">Members</option>
+                        {{-- <option value="members">Members</option> --}}
                         <option value="tithes">Tithes</option>
-                        <option value="expenditures">Expenditures</option>
+                        {{-- <option value="expenditures">Expenditures</option> --}}
                     </select>
                 </div>
                 <div class="col-12 col-md-6 col-lg-3">
@@ -63,7 +63,7 @@
                     <div class="card-body">
                         <h6 class="card-title">Average <br> Attendance</h6>
                         <hr>
-                        <h3 id="averageAttendance" class="mt-2 fw-bold text-danger">fetching...</h3>
+                        <h3 id="averageAttendance" class="mt-2 text-nowrap fw-bold text-danger">fetching...</h3>
                     </div>
                 </div>
             </div>
@@ -72,7 +72,7 @@
                     <div class="card-body">
                         <h6 class="card-title">Total <br> Inflow</h6>
                         <hr>
-                        <h3 id="totalInflow" class="mt-2 fw-bold text-primary">fetching...</h3>
+                        <h3 id="totalInflow" class="mt-2 text-nowrap fw-bold text-primary">fetching...</h3>
                     </div>
                 </div>
             </div>
@@ -81,7 +81,7 @@
                     <div class="card-body">
                         <h6 class="card-title">Total <br> Expenditures</h6>
                         <hr>
-                        <h3 id="totalExpenditures" class="mt-2 fw-bold text-warning">fetching...</h3>
+                        <h3 id="totalExpenditures" class="mt-2 text-nowrap fw-bold text-warning">fetching...</h3>
                     </div>
                 </div>
             </div>
@@ -90,7 +90,7 @@
                     <div class="card-body">
                         <h6 class="card-title">Total <br> Balance</h6>
                         <hr>
-                        <h3 id="totalBalance" class="mt-2 fw-bold text-success">fetching...</h3>
+                        <h3 id="totalBalance" class="mt-2 text-nowrap fw-bold text-success">fetching...</h3>
                     </div>
                 </div>
             </div>
@@ -98,7 +98,7 @@
         <!-- Table Section -->
         <div class="row mb-2 g-4 justify-content-center text-center">
             <div class="col-12">
-                <div class="table-responsive reportTable">
+                <div class="table-responsive reportTable" id="reportTable">
                     <i>Table will appear here!!!</i>
                 </div>
             </div>
@@ -115,6 +115,7 @@
                 </div>
             </div>
         </div> --}}
+
     </div>
     <script>
         $(document).ready(function() {
@@ -208,6 +209,7 @@
             function filterData(start, end, category, serviceCategory) {
                 $('#loader-overlay').show(); // show loader initially
                 // var transactionChart = null;
+                // alert(start + " " + end + " " + category + " " + serviceCategory);
                 // Add your AJAX request or data filtering logic here
                 $.ajax({
                     url: '/branch_pastor/reports/filter',
@@ -248,88 +250,95 @@
                                 maximumFractionDigits: 0
                             }).format(response.totalBalance));
 
-                            //place the table into block with id="reportsTable", use returned data on bases of category filtered
-                            //start with table when category if inflow
-                            //     var salesTable = `
-                        //         <table class="table table-striped table-bordered table-hover reportsTable">
-                        //             <thead>
-                        //                 <tr>
-                        //                     <th>#</th>
-                        //                     <th>Date</th>
-                        //                     <th>Medicine</th>
-                        //                     <th>Quantity</th>
-                        //                     <th>Total Sales</th>
-                        //                     <th>Total profit</th>
-                        //                 </tr>
-                        //             </thead>
-                        //             <tbody>
-                        //                 ${response.sales.map((sale, index) => `
-                            //                                                                                                             <tr>
-                            //                                                                                                                 <td>${index + 1}</td>
-                            //                                                                                                                 <td>${sale.date}</td>
-                            //                                                                                                                 <td class="text-left">${sale.item['name']}</td>
-                            //                                                                                                                 <td>${sale.quantity}</td>
-                            //                                                                                                                 <td>${new Intl.NumberFormat('en-TZ', { style: 'currency', currency: 'TZS', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(sale.quantity*sale.stock['selling_price'])}</td>
-                            //                                                                                                                 <td>${new Intl.NumberFormat('en-TZ', { style: 'currency', currency: 'TZS', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(sale.quantity*(sale.stock['selling_price']-sale.stock['buying_price']))}</td>
-                            //                                                                                                             </tr>
-                            //                                                                                                         `).join('')}
-                        //                     ${response.sales.length == 0 ? ` <tr> <td colspan="6" class="text-center">No data found</td> </tr> ` : ''}
-                        //             </tbody>
-                        //         </table>
-                        //     `;
+                            // generate table data for each category
+                            var inflowTable = `
+                                <table id="reportsTable1"  class="table table-striped table-bordered table-hover text-left reportsTable">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Date</th>
+                                            <th>Service Name</th>
+                                            <th>Total Inflow</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${response.inflow.map((item, index) => `
+                                                        <tr>
+                                                            <td>${index + 1}</td>
+                                                            <td>${item.date}</td>
+                                                            <td>${item.service['name']}</td>
+                                                                <td>${new Intl.NumberFormat('en-TZ', { style: 'currency', currency: 'TZS', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(item.worship_offering + item.tithe_offering + item.thanksgiving_offering + item.project_offering + item.special_offering + item.firstfruits_offering + item.children_offering + item.cds_dvd_tapes + item.books_and_stickers)}</td>
+                                                            <td>${item.status ? (item.status==1?'Approved':'Unapproved') : 'Unchecked'}</td>
+                                                                `).join('')}
+                                                    </tr>
+                                    </tbody>
+                                </table>
+                                `;
 
-                            //     //lets implement table when category is stocks, the stocks table should list (serial number(#), Batch number, stocked quantity, remained quantity, total sales amount made, total profit made, and total expired loss amount)
-                            //     var stocksTable = `
-                        //         <table class="table table-striped table-bordered table-hover reportsTable">
-                        //             <thead>
-                        //                 <tr>
-                        //                     <th>#</th>
-                        //                     <th>Batch Number</th>
-                        //                     <th>Medicine</th>
-                        //                     <th>Stocked Quantity</th>
-                        //                     <th>Remained Quantity</th>
-                        //                     <th>Total Sales</th>
-                        //                     <th>Total Profit</th>
-                        //                     <th>Expired Loss</th>
-                        //                 </tr>
-                        //             </thead>
-                        //             <tbody>
-                        //                 ${response.stocks.map((stock, index) => `
-                            //                                                                                                             <tr>
-                            //                                                                                                                 <td>${index + 1}</td>
-                            //                                                                                                                 <td>${stock.batch_number}</td>
-                            //                                                                                                                 <td class="text-left">${stock.item['name']}</td>
-                            //                                                                                                                 <td>${stock.quantity}</td>
-                            //                                                                                                                 <td>${stock.remain_Quantity}</td>
-                            //                                                                                                                 <td>${new Intl.NumberFormat('en-TZ', { style: 'currency', currency: 'TZS', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(stock.selling_price*(stock.quantity-stock.remain_Quantity))}</td>
-                            //                                                                                                                 <td>${new Intl.NumberFormat('en-TZ', { style: 'currency', currency: 'TZS', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format((stock.quantity-stock.remain_Quantity)*(stock.selling_price-stock.buying_price))}</td>
-                            //                                                                                                                 ${stock.expire_date < today ? `<td>${new Intl.NumberFormat('en-TZ', { style: 'currency', currency: 'TZS', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(stock.buying_price*stock.remain_Quantity)}</td>`:`<td>0</td>`}
-                            //                                                                                                             </tr>`).join('')}
-                        //                     ${response.stocks.length == 0 ? `<tr><td colspan="8" class="text-center">No data found</td></tr>` : ''}
-                        //             </tbody>
-                        //         </table>
-                        //     `;
+                        
+                            var serviceTable = `
+                                <table id="reportsTable2"  class="table table-striped table-bordered table-hover text-left reportsTable">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Date</th>
+                                            <th>Service Name</th>
+                                            <th>Guest</th>
+                                            <th>Total Attendance</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${response.services.map((item, index) => `
+                                            <tr>
+                                                <td>${index + 1}</td>
+                                                <td>${item.date}</td>
+                                                <td>${item.service_category['name']}</td>
+                                                <td>${item.first_timers }</td>
+                                                <td>${item.men + item.women + item.children}</td>
+                                                <td>${item.status ? (item.status==1?'Approved':'Unapproved') : 'Unchecked'}</td>
+                                            </tr>
+                                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            `;
+                            var tithesTable = `
+                                <table id="reportsTable3" class="table table-striped table-bordered table-hover text-left reportsTable">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Date</th>
+                                            <th>Service Name</th>
+                                            <th>Total Tithes</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${response.inflow.map((item, index) => `
+                                        <tr>
+                                            <td>${index + 1}</td>
+                                            <td>${item.date}</td>
+                                            <td>${item.service['name']}</td>
+                                            <td>${new Intl.NumberFormat('en-TZ', { style: 'currency', currency: 'TZS', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(item.tithe_offering)}</td>
+                                                `).join('')}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            `;
+                            
+                            //place the table into block with class="reportsTable"
+                            if (category == 'inflow') {
+                                $('.reportTable').html(inflowTable);
+                            }
 
+                            if (category == 'services') {
+                                $('.reportTable').html(serviceTable);
+                            }
 
-                            //     //place the table into block with id="reportsTable", use returned data on bases of category filtered
-                            //     if (category == 'sales') {
-                            //         $('.reportTable').html(salesTable);
-                            //         //append footer with total profit to the table after the tbody
-                            //         //capture the table body object to append the footer
-                            //         var tableBody = $('.reportTable').find('tbody');
-                            //         //append the footer to the table
-                            //         tableBody.after(`
-                        //         <tfoot>
-                        //             <tr>
-                        //                 <td colspan="4" class="text-end fw-bolder fs-5">Total Profit</td>
-                        //                 <td colspan="1" class="text-center fw-bolder" id="">${new Intl.NumberFormat('en-TZ', { style: 'currency', currency: 'TZS', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(response.totalSales)}</td>
-                        //                 <td colspan="1" class="text-center fw-bolder" id="">${new Intl.NumberFormat('en-TZ', { style: 'currency', currency: 'TZS', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(response.totalProfit)}</td>
-                        //             </tr>
-                        //         </tfoot>
-                        //     `);
-                            //     } else if (category == 'stocks') {
-                            //         $('.reportTable').html(stocksTable);
-                            //     }
+                            if (category == 'tithes') {
+                                $('.reportTable').html(tithesTable);
+                            }
+
                         } else {
                             // Update the summary cards with 0 decimal points
                             $('#averageAttendance').text(new Intl.NumberFormat().format(response
@@ -360,8 +369,9 @@
 
                         // Initialize DataTable, but count the number of rows in the table first, if it is greater than 0, then destroy the table and reinitialize it, otherwise skip the initialization
                         if (response.rows > 0) {
-                            $('.reportsTable').DataTable().destroy(); // Destroy the old table
-                            $('.reportsTable').DataTable({
+                            // Destroy the old table
+                            // $('.reportsTable').DataTable().destroy(); 
+                            $('.reportsTable, #reportsTable1, #reportsTable2, #reportsTable3').DataTable({
                                 paging: true, // Enable paging
                                 searching: true, // Enable search bar
                                 ordering: true, // Enable column sorting
@@ -370,14 +380,14 @@
                                 buttons: [{
                                         extend: 'csvHtml5',
                                         title: 'Reports',
-                                        text: 'Download CSV',
-                                        className: 'btn btn-primary reportsDownloadButton'
+                                        text: '<i class="fas fa-file-csv"></i> Download CSV',
+                                        className: 'btn btn-outline-success reportsDownloadButton'
                                     },
                                     {
                                         extend: 'pdfHtml5',
                                         title: 'Reports',
-                                        text: 'Download PDF',
-                                        className: 'btn btn-secondary reportsDownloadButton',
+                                        text: '<i class="fas fa-file-pdf"></i> Download PDF',
+                                        className: 'btn btn-outline-danger reportsDownloadButton',
                                         orientation: 'portrait', // Landscape orientation for PDF
                                         pageSize: 'A4' // A4 page size
                                     }
@@ -398,9 +408,6 @@
                         alert('Failed to filter Reports.');
                     }
                 });
-
-
-
             }
         });
     </script>

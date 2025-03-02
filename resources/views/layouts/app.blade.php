@@ -136,12 +136,15 @@
                 });
             @endif
 
-            $('Table').DataTable({
-                paging: true, // Enable paging
-                searching: true, // Enable search bar
-                ordering: true, // Enable column sorting
-                info: true // Enable information display
-            });
+            // if the table is reports table do not run beol code
+            // if ($('table').attr('id') !== 'reportsTable') {
+                $('Table').DataTable({
+                    paging: true, // Enable paging
+                    searching: true, // Enable search bar
+                    ordering: true, // Enable column sorting
+                    info: true // Enable information display
+                });
+            // }
 
             $(".chosen").chosen({
                 // $("#select").chosen({
@@ -266,12 +269,30 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js">
     </script>
+
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.js"></script>
-    {{-- END OF PROGRAMER DEFINED SCRIPTS --}}
+    {{-- // END OF PROGRAMER DEFINED SCRIPTS --}}
 
+
+    {{-- // FOR DOWNLOADING REPORTS --}}
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+
+    {{-- // <!-- Include JSZip and pdfmake for export functionality --> --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.5/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.5/vfs_fonts.js"></script>
+
+    {{-- // <!-- Include Buttons extensions --> --}}
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    {{-- // END OF FOR DOWNLOADING REPORTS --}}
 
 </body>
 
