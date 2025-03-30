@@ -64,7 +64,14 @@
                                 <select name="role" id="role" class="form-control chosen">
                                     <option value="">Select Role</option>
                                     @foreach (\Spatie\Permission\Models\Role::all() as $role)
-                                        @if ($role->name != 'super admin' && $role->name != 'church admin' && $role->name != 'church bishop' && $role->name != 'church hof')
+                                        @if (
+                                            $role->name != 'super admin' &&
+                                                $role->name != 'church admin' &&
+                                                $role->name != 'church bishop' &&
+                                                $role->name != 'church hof' &&
+                                                $role->name != 'branch admin' &&
+                                                $role->name != 'branch pastor' &&
+                                                $role->name != 'branch hof')
                                             <option value="{{ $role->name }}">{{ $role->name }}</option>
                                         @endif
                                     @endforeach
@@ -78,7 +85,9 @@
                                 <select name="member_id" id="member" class="form-control chosen">
                                     <option value="">Select User</option>
                                     @foreach ($members as $member)
-                                        <option value="{{ $member->id }}">{{ $member->user->name }}</option>
+                                        @if ($member->user->id != Auth::user()->id)
+                                            <option value="{{ $member->id }}">{{ $member->user->name }}</option>
+                                        @endif
                                     @endforeach
                                 </select>
                             </div>

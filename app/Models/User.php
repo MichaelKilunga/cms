@@ -69,9 +69,9 @@ class User extends Authenticatable
         ];
     }
     
-    public function members()
+    public function member()
     {
-        return $this->hasMany(Member::class);
+        return $this->hasOne(Member::class);
     }
     
     public function churches()

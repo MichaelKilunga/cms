@@ -29,6 +29,7 @@ use App\Http\Controllers\branch_admin\BranchAdminServiceCategoryController;
 // branch pastor
 use App\Http\Controllers\branch_pastor\BranchPastorController;
 use App\Http\Controllers\branch_pastor\BranchPastorBranchController;
+use App\Http\Controllers\branch_pastor\BranchPastorExpensesController;
 use App\Http\Controllers\branch_pastor\BranchPastorMemberController;
 use App\Http\Controllers\branch_pastor\BranchPastorServiceController;
 use App\Http\Controllers\branch_pastor\BranchPastorFinanceController;
@@ -269,6 +270,17 @@ Route::middleware(['auth', 'can:pastor branch'])->group(function () {
     Route::delete('branch_pastor/finances/{finance}', [BranchPastorFinanceController::class, 'destroy'])->name('branch_pastor.finances.destroy');
 
     Route::get('branch_pastor/finances/approve/{id}', [BranchPastorFinanceController::class, 'approveFinanceReport'])->name('branch_pastor.finances.approve');
+
+    // // FINANCES ROUTES
+    Route::get('branch_pastor/expenses', [BranchPastorExpensesController::class, 'index'])->name('branch_pastor.expenses');
+    Route::get('branch_pastor/expenses/create', [BranchPastorExpensesController::class, 'create'])->name('branch_pastor.expenses.create');
+    Route::post('branch_pastor/expenses', [BranchPastorExpensesController::class, 'store'])->name('branch_pastor.expenses.store');
+    Route::get('branch_pastor/expenses/{expenses}/edit', [BranchPastorExpensesController::class, 'edit'])->name('branch_pastor.expenses.edit');
+    Route::get('branch_pastor/expenses/{expenses}', [BranchPastorExpensesController::class, 'show'])->name('branch_pastor.expenses.show');
+    Route::put('branch_pastor/expenses/{expenses}', [BranchPastorExpensesController::class, 'update'])->name('branch_pastor.expenses.update');
+    Route::delete('branch_pastor/expenses/{expenses}', [BranchPastorExpensesController::class, 'destroy'])->name('branch_pastor.expenses.destroy');
+
+    Route::get('branch_pastor/expenses/approve/{id}', [BranchPastorExpensesController::class, 'approveExpensesReport'])->name('branch_pastor.expenses.approve');
 
     // // MESSAGES ROUTES
     // Route::get('messages', [MessageController::class, 'index'])->name('messages');

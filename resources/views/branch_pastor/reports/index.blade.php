@@ -94,6 +94,15 @@
                     </div>
                 </div>
             </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h6 class="card-title">Tithe  <br> <span class="text-danger" > (10%) </span></h6>
+                        <hr>
+                        <h3 id="tithe" class="mt-2 text-nowrap fw-bold text-success">fetching...</h3>
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- Table Section -->
         <div class="row mb-2 g-4 justify-content-center text-center">
@@ -250,9 +259,16 @@
                                 maximumFractionDigits: 0
                             }).format(response.totalBalance));
 
+                            $('#tithe').text(new Intl.NumberFormat('en-TZ', {
+                                style: 'currency',
+                                currency: 'TZS',
+                                minimumFractionDigits: 0,
+                                maximumFractionDigits: 0
+                            }).format(response.totalBalance*0.1));
+
                             // generate table data for each category
                             var inflowTable = `
-                                <table id="reportsTable1"  class="table table-striped table-bordered table-hover text-left reportsTable">
+                                <table class="table table-striped table-bordered table-hover text-left reportsTable">
                                     <thead>
                                         <tr>
                                             <th>#</th>
@@ -278,7 +294,7 @@
 
                         
                             var serviceTable = `
-                                <table id="reportsTable2"  class="table table-striped table-bordered table-hover text-left reportsTable">
+                                <table  class="table table-striped table-bordered table-hover text-left reportsTable">
                                     <thead>
                                         <tr>
                                             <th>#</th>
@@ -304,7 +320,7 @@
                                 </table>
                             `;
                             var tithesTable = `
-                                <table id="reportsTable3" class="table table-striped table-bordered table-hover text-left reportsTable">
+                                <table class="table table-striped table-bordered table-hover text-left reportsTable">
                                     <thead>
                                         <tr>
                                             <th>#</th>
@@ -314,7 +330,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        ${response.inflow.map((item, index) => `
+                                        ${response.tithes.map((item, index) => `
                                         <tr>
                                             <td>${index + 1}</td>
                                             <td>${item.date}</td>
@@ -370,8 +386,8 @@
                         // Initialize DataTable, but count the number of rows in the table first, if it is greater than 0, then destroy the table and reinitialize it, otherwise skip the initialization
                         if (response.rows > 0) {
                             // Destroy the old table
-                            // $('.reportsTable').DataTable().destroy(); 
-                            $('.reportsTable, #reportsTable1, #reportsTable2, #reportsTable3').DataTable({
+                            $('.reportsTable').DataTable().destroy(); 
+                            $('.reportsTable').DataTable({
                                 paging: true, // Enable paging
                                 searching: true, // Enable search bar
                                 ordering: true, // Enable column sorting

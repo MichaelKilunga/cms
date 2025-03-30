@@ -109,10 +109,10 @@
                                 @endisset
                             @endcan
                             @can('manage branch')
-                                {{ Auth::user()->members->first()->branch->name }}
+                                {{ Auth::user()->member->first()->branch->name }}
                             @endcan                            
                             @can('pastor branch')
-                                {{ Auth::user()->members->first()->branch->name }}
+                                {{ Auth::user()->member->first()->branch->name }}
                             @endcan
                         </p>
                     </span>
@@ -271,6 +271,9 @@
                     </x-nav-link>
                     <x-nav-link href="{{ route('branch_pastor.reports') }}" :active="request()->routeIs('branch_pastor.reports')">
                         {{ __('Report') }}
+                    </x-nav-link>
+                    <x-nav-link href="{{ route('branch_pastor.expenses') }}" :active="request()->routeIs('branch_pastor.expenses')">
+                        {{ __('Expenses') }}
                     </x-nav-link>
                     {{-- <x-nav-link href="{{ route('messages') }}" :active="request()->routeIs('messages')">
                         {{ __('Messages') }}

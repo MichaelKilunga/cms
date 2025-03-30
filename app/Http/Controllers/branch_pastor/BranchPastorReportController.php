@@ -90,7 +90,6 @@ class BranchPastorReportController extends Controller
         Get all tithes within the given range, for a particular branch
         */
             $tithes = Finance::where('branch_id', $currentBranch->id)
-                ->where('type', 'tithe')
                 ->whereBetween('date', [$request->start, $request->end])
                     ->with('service')
                     ->get();
@@ -140,7 +139,6 @@ class BranchPastorReportController extends Controller
                     ->get();
 
                 $tithes = Finance::where('branch_id', $currentBranch->id)
-                ->where('type', 'tithe')
                 ->whereBetween('date', [$request->start, $request->end])
                 ->whereHas('service', function ($query) use ($serviceCategoryId) {
                         $query->where('service_category_id', $serviceCategoryId);
@@ -175,18 +173,15 @@ class BranchPastorReportController extends Controller
 
             /* set number of rows in "rows" variable based on the category
             */
-            if ($request->category == 'tithe') {
+            if ($request->category == 'tithes') {
                 $rows = $tithes->count();
             }
             if ($request->category == 'inflow') {
                 $rows = $finances->count();
             }
-            if ($request->category == 'service') {
+            if ($request->category == 'services') {
                 $rows = $services->count();
-            }            
-            if ($request->category == 'members') {
-                $rows = $members->count();
-            }            
+            }           
 
             return response()->json([
                 'success' => true,
