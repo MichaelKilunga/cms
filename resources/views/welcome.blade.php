@@ -110,7 +110,7 @@
             <h2 class="h1 text-primary mb-4">Sample Test Users</h2>
             <div class="row g-4">
                 @foreach ([
-                    ['Super Admin', 'superadmin@mail.com', '0700000000'],
+                    ['Super Admin', 'super@mail.com', '0700000000'],
                     ['Church Admin', 'churchadmin@mail.com', '0711111111'],
                     ['Church Hof', 'churchhof@mail.com', '0722222222'],
                     ['Branch Admin', 'branchadmin@mail.com', '0733333333'],
