@@ -112,10 +112,11 @@
                 @foreach ([
                     ['Super Admin', 'superadmin@mail.com', '0700000000'],
                     ['Church Admin', 'churchadmin@mail.com', '0711111111'],
-                    ['Church Board', 'churchboard@mail.com', '0722222222'],
+                    ['Church Hof', 'churchhof@mail.com', '0722222222'],
                     ['Branch Admin', 'branchadmin@mail.com', '0733333333'],
-                    ['Branch Leader', 'branchleader@mail.com', '0744444444'],
-                    ['Member', 'member@mail.com', '0755555555'],
+                    ['Branch Pastor', 'pastor@mail.com', '0744444444'],
+                    ['Branch Head of Finance', 'branchhof@mail.com', '0755555555'],
+                    ['Member', 'member@mail.com', '0766666666'],
                 ] as [$role, $email, $phone])
                     <div class="col-md-4">
                         <div class="card h-100 shadow-sm">
