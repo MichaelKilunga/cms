@@ -18,7 +18,7 @@
         }
 
         .hero-section {
-            background: url('/images/church-hero.jpg') no-repeat center center;
+            background: url('/images/bg3.jpg') no-repeat center center;
             background-size: cover;
             color: white;
         }
