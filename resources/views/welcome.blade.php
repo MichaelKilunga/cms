@@ -110,12 +110,12 @@
             <h2 class="h1 text-primary mb-4">Sample Test Users</h2>
             <div class="row g-4">
                 @foreach ([
-                    ['Super Admin', 'superadmin@demo.com', '0700000000'],
-                    ['Church Admin', 'churchadmin@demo.com', '0711111111'],
-                    ['Church Board', 'churchboard@demo.com', '0722222222'],
-                    ['Branch Admin', 'branchadmin@demo.com', '0733333333'],
-                    ['Branch Leader', 'branchleader@demo.com', '0744444444'],
-                    ['Member', 'member@demo.com', '0755555555'],
+                    ['Super Admin', 'superadmin@mail.com', '0700000000'],
+                    ['Church Admin', 'churchadmin@mail.com', '0711111111'],
+                    ['Church Board', 'churchboard@mail.com', '0722222222'],
+                    ['Branch Admin', 'branchadmin@mail.com', '0733333333'],
+                    ['Branch Leader', 'branchleader@mail.com', '0744444444'],
+                    ['Member', 'member@mail.com', '0755555555'],
                 ] as [$role, $email, $phone])
                     <div class="col-md-4">
                         <div class="card h-100 shadow-sm">
